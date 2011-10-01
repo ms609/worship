@@ -1,0 +1,19 @@
+{
+  "name": "Coda worship manager",
+  "description": "Display worship slides, view and transpose chords, share setlists.  A complete manager for church worship.",
+  "version": "0.1.2.0",
+  "app": {
+    "urls": [
+      "http://geological-supplies.com/nlife/"
+    ],
+    "launch": {
+      "web_url": "http://geological-supplies.com/nlife/control.html"
+    }
+  },
+  "icons": {
+    "128": "96-in-128.png"
+  },
+  "permissions": [
+    "unlimitedStorage"
+  ]
+}

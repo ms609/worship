@@ -1,0 +1,233 @@
+.setListItem {
+  background:#eee;
+  padding: 2px;
+  margin: 4px 5px 4px 2px;
+  font-size: 10pt;
+  position: relative;
+  color: black;
+  padding: 0 2px;
+  -webkit-box-shadow: 2px 2px 3px #9F9999;
+  box-shadow: 3px 3px 4px #9F9999;
+  cursor: move;
+  overflow: hidden;
+  height: 2.5em;
+  /* border-radius: 15px; */
+}
+
+.setListItem.over {
+  border-bottom: double 3px #111;
+}
+
+.rmButton, .showNowButton {
+  display: inline-block;
+  font-size: 180%;
+  padding: 0 0.4em;
+  cursor: default;
+}
+
+.showNowButton {
+  position: absolute;
+  right: 0; top: 0;
+}
+
+.setListTitle {
+  line-height: 180%;
+  position: relative;
+  top: -3px;
+}
+
+.unavailableAction {opacity: 0.3;}
+
+.chords {
+  display: none;
+}
+
+.displayPreview {
+  min-height: 333px;
+}
+
+.greyOut {
+  position: fixed;
+  top: 0; left: 0;
+  height: 100%; width: 100%;
+  background-color: rgba(0,0,0,.7);  
+}
+
+#coverFrameTitle {
+  font-weight: bold;
+  color: #88BC3F;
+  background-color: #eee;
+  padding: 4px 1em 3px;
+  border-bottom: 2px dotted;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+#removeCoverFrame {
+  position: absolute; 
+  right: 1em;
+}
+
+.greyOut {
+  height: 100%; 
+}
+
+#slideNew {
+  position: relative;
+  background-color: #fff;
+  margin: 2em;
+  min-width: 820px;
+  border-color: #eee;
+  border-width: 1px;
+  border-radius: 15px;
+  -webkit-box-shadow: 3px 3px 4px #9f9999;
+  box-shadow: 3px 3px 4px #9f9999;
+}
+
+#slideNewContent {
+  padding: 0.2em 1em;
+}
+
+footer, #controlPanel, #preview,
+#container, #content {
+  position: absolute;
+}
+#container {
+  top: 36px;
+  bottom: 60px;
+  left: 8px;
+  right: 8px;
+}
+
+body {
+  margin: 0;
+}
+header {
+  height: 36px;
+  margin: 0;
+}
+
+#content {
+  top: 0; left: 0; 
+  height: 100%; width: 100%;
+  position: relative;
+  display: table;
+  padding-top: 1em;
+}
+
+#column1, #column2, #column3  {
+  display: table-cell;
+  height: 100%;
+  position: relative;
+}
+.columnContent{
+  display:table;
+  height: 100%;
+}
+.row {
+  display: table-row;
+}
+.cell {
+  display: table-cell;
+}
+
+#column1 {
+  width: 330px;
+}
+
+#searchHeader {
+  height: 3em;
+}
+
+#searchResults {
+  position: absolute; top: 3em; bottom: 240px;
+}
+
+#fullList {
+  float: left;
+  width: 290px;
+  height: 100%;
+}
+
+#moveSongButton {
+  height: 100%;
+}
+
+#moveRightButton {
+  border: 1px solid;
+  font-weight: bold;
+  height: 100%;
+  border-radius: 0;
+  background-color: white;
+  box-shadow: 0;  
+}
+
+input.button {
+  display: table-cell;
+  height:100%;
+  font-size: larger;
+  width: 40px;
+  float: left;
+}
+
+#preview {
+  border: solid black;
+  border-width: 0 5px;
+  display: table-row;
+  position: absolute;
+  font: -webkit-small-control;
+  width: 320px;
+  height: 240px;
+  bottom: 0;
+}
+
+#preview h1 {
+  margin: 0; white-space: nowrap;
+  font: normal sans-serif; 
+  color: #9be;
+  border: none;
+}
+
+
+#setListMenu, #selectSetList {
+  height: 1.5em;
+}
+
+#setList {
+  overflow: auto;
+  position: absolute;
+  top: 1.5em;
+  bottom: 1.5em;;
+  width: 100%;
+}
+
+#setListMenu {
+  position: absolute; bottom: 0;
+}
+
+#addWordsBox {
+  width: 100%;
+  min-height: 333px;
+  bottom: 0;
+  height: 100%;
+}
+
+#controlPanel {
+  bottom: 0;
+  margin-bottom: 10px;
+  /* height will be 50px */
+}
+
+#nextButton, #previousButton, #launchButton {
+  font-weight: bold;
+}
+#nextButton, #previousButton {
+  padding: 24px;
+}
+
+footer {
+  bottom: 0;
+}
+
+
+/*div {border: solid 1px green;}*/

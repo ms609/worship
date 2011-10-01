@@ -1,0 +1,57 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Server sync | Newlife Church Toronto</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="js/get_server_database.php"></script><!-- these can go first as they need PHP parsing-->
+    <script src="js/get_server_lists.php"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/parser.js"></script>
+    <script src="js/slideDatabase.js"></script>
+    <script src="js/localStorage.js"></script>
+    <script src="js/ini.js"></script>
+    <script src="js/diff.js"></script>
+
+    <!-- style sheet links -->
+    <link rel="stylesheet" href="css/outline.css" type="text/css" media="screen" id="outlineStyle" />
+    <link rel="stylesheet" href="css/form.css" type="text/css" media="screen" id="editFields" />
+    <link rel="stylesheet" href="css/slides.css" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="css/control.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/backend.css" type="text/css" media="screen" />
+  </head>
+  <body>
+
+    <a href="control.html">Main page</a>
+    <a href="edit.html">Edit songs</a>
+    <h1>Song Synchroniser</h1>
+
+    <p>This page displays:</p>
+    <ul>
+      <li>
+        Any songs where there is a difference between the local file and the file stored on the server.
+      </li><li>
+        Any set lists present on the server or the local machine.
+      </li>
+    </ul>
+    <p>To use the page:</p>
+    <ul>
+    <li>For each song, click on the version that you want:<ul>
+      <li>Select "On server" to retrieve the latest version of the song from the server</li>
+      <li>Select "On this PC" version to send your version to the server,
+        so that it's available to others</li>
+    </ul></li>
+    </ul>
+    <p id="flush">You can quickly update all songs to the most recent version by
+      <a href="flush.html">flushing the locally stored data</a>.
+    </p>
+
+    <div id="differentSlides">      
+    </div>
+    <div id="differentLists">
+    </div>
+  </body>
+</html>

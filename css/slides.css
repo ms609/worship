@@ -1,0 +1,20 @@
+/* 
+    Document   : slides
+    Created on : 29-Nov-2010, 02:55:39
+    Author     : ms609: martinsAgmail.com
+    Description:
+      Styles for slides
+
+*/
+
+.indent {padding-left: 3.3em !important;}
+.bold   {font-weight: bold;}
+.italic {
+  font-style: italic;
+  opacity: 0.8;
+}
+.green  {color: #be9;}
+.blue    {color: #9Be;}
+.yellow{color: #ee8;}
+.white  {color: #eee;}
+.printonly {display:none;}

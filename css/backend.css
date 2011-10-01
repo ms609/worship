@@ -1,0 +1,137 @@
+/* 
+    Document   : backend
+    Created on : 28-Nov-2010, 00: 07: 41
+    Author     : ms609
+    Description:
+        used on all control pages for a uniform theme
+*/
+
+
+@font-face { font-family: 'Arial Narrow'; src: url('ARIALN.TTF'); }
+@font-face { font-family: 'Arial Narrow'; font-weight: bold; src: url('ARIALNB.TTF'); }
+@font-face { font-family: 'Arial Narrow'; font-style: italic; src: url('ARIALNI.TTF'); }
+@font-face { font-family: 'Arial Narrow'; font-weight: bold; font-style: italic; src: url('ARIALNBI.TTF'); }
+
+root { 
+    display: block;
+}
+
+/* Coloured text: #88BC3F;
+* bright: #abed51
+* body text: #8D8A8A (mid grey)
+* dark grey / shadow:  #9f9999;
+* light grey : #eee
+*/
+body {
+  background-color: white;
+  color: #8D8A8A;
+  /*background-image: -webkit-gradient(linear, left top, left bottom, from(#d9ffec), to(#8fbfa8), color-stop(0.8, #BDC));*/
+  font-family: Tahoma, Verdana, Arial, Helvetica, 'Bitstream Vera Sans', sans-serif;
+}
+
+a:link, a:visited {
+  color: #8D8A8A;
+  text-decoration: none;
+  font-weight: bold;
+  padding-left: 10px;
+}
+
+a:hover {
+  color: #88BC3F;
+  text-decoration: none;
+}
+
+a:before {
+  content: '\2022\0020'; /*Bullet, space*/
+}
+
+h1, h2, h3, header, footer {
+  color: #88BC3F;
+  font-weight: normal;
+  line-height: 1.3em;
+}
+
+.diffslide {
+  float: right;
+  margin-right: 5px;
+}
+
+.newline {
+  display: block;
+  clear: both;
+}
+
+.differentline {
+  color: red;
+  background-color: #ff9;
+}
+
+.slidewords {
+  width: 400px;
+  font-family: "Arial narrow", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 0.95;
+  font-weight: bold;
+}
+
+.toggle {
+  font-weight: bold;
+}
+
+h2 {
+  clear: both;
+  border-top: solid 2px;
+  margin-top: 8px;
+}
+
+.changelabel, .changes {
+  vertical-align: middle;
+  padding: 5px;
+  display: table-cell;
+  border: solid 1px;
+}
+
+.changelabel {
+  width: 17%;
+}
+
+.subtitle {font-size: smaller;}
+
+.local, .server {
+  width: 40%;
+  margin-left: 1%;
+}
+
+.shady {
+  background-color: rgba(0,0,0,0.2);
+}
+
+textarea {
+  font-family: 'Arial Narrow';
+}
+
+header {
+  width: 100%;
+  border-bottom: solid 2px #8D8A8A;
+  font-size: larger;
+}
+
+header h1 {
+  font-size: larger;
+  border-top: 1px solid #8d8a8a;
+  padding-top: 8px;
+  margin-top: 3px;
+}
+
+footer {
+  clear: both;
+  border-top: solid 2px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.startCollapsed {
+  height: 0px;
+  display: none;
+  overflow: hidden;
+}

@@ -1,0 +1,41 @@
+.handout {max-width: 900px}
+
+input {border-top: none;}
+input.title  {width: 80%;}
+input.author {width: 75%;}
+textarea {width:100%; font-family: 'Arial narrow', Tahoma, Arial, Sans-serif;}
+
+notused {
+  background-image: -webkit-gradient(linear, left top, right top, from(#DFE), to(#8CA));
+}
+
+input[type=button] {
+  border-width:1px;
+  border-radius: 15px;
+  border-color:#eee;
+  -webkit-box-shadow: 3px 3px 4px #9f9999;
+  box-shadow: 3px 3px 4px #9f9999;
+}
+
+input {
+  color: #322;
+  font-family: Tahoma, Verdana, Arial, Helvetica, 'Bitstream Vera Sans', sans-serif;
+}
+
+textarea, select {
+  font-family: 'Arial narrow', Tahoma, Verdana, Arial, Helvetica, 'Bitstream Vera Sans', sans-serif;
+  -webkit-box-shadow: 3px 3px 4px #9f9999;
+  box-shadow: 3px 3px 4px #9f9999;
+}
+
+input[disabled] {
+  color:#9f9999;
+}
+
+.bigButton {
+  padding: 20px 16px;
+  letter-spacing: -1px;
+  line-height: 0;
+}
+
+select, .songTitleWidth{width:25em;}

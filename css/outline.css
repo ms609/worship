@@ -1,0 +1,57 @@
+/* don't change this unless you want the layout stuff to show up in the outline view! */
+
+.layout div, #footer *, #controlForm * {display: none;}
+#footer, #controls, #controlForm, #navLinks, #toggle {
+  display: block; visibility: visible; margin: 0; padding: 0;}
+#toggle {float: right; padding: 0.5em;}
+html>body #toggle {position: fixed; top: 0; right: 0;}
+
+/* making the outline look pretty-ish */
+
+#slide0 h1, #slide0 h2, #slide0 h3, #slide0 h4 {border: none; margin: 0;}
+#slide0 h1 {padding-top: 1.5em;}
+.slide h1 {margin: 1.5em 0 0; padding-top: 0.25em;
+  border-top: 1px solid #888; border-bottom: 1px solid #AAA;}
+#toggle {border: 1px solid; border-width: 0 0 1px 1px; background: #FFF;}
+
+.words {height: 16.4em; overflow: hidden; position:relative;}
+.leftcol, .rightcol {width: 48%; overflow: hidden;}
+.leftcol {float: left;}
+.rightcol {float: right; height:75%;}
+.credit {
+  font-size: xx-small;
+  width:46%;
+  border-top: solid 1px #fff;
+  color: #fff;
+  position:absolute;
+  right: 0; bottom: 2%;
+  height: 22%;
+  background: #000; opacity: 0.7;
+  text-align: right; padding-right: 2%;
+}
+
+.slidecontent {
+  background-color:black;
+  background-image: url('../ui/default/background.jpg');
+  background-position: bottom right;
+  background-size: 100%;
+  color:white;
+  width:400px;
+  padding-left:4px;
+}
+
+.slidecontent h1{
+  font-size:small;
+  color:#79e;
+}
+
+.slidecontent h2{
+  font-size:xx-small;
+  color:#bbb;
+}
+
+.leftcol span, .rightcol span, .nocol span {display: block; line-height: 1.15em;
+    margin-bottom:0.05em;}
+.leftcol p, .rightcol p, .nocol p {margin: 0 0 0.9em; font-size:70%; 
+    padding-left: 1.5em; text-indent: -1.5em;}
+ 
