@@ -13,6 +13,19 @@ var slideshow;
 var onScreenNow = '';
 var slidePosition = {'sermon' : 0, 'announcements' : 0};
 
+// Esoteric settings
+var pathToAnnouncements = '../../announce/Announcements-ohp.html'; // Path to an announcements file using the S5 slideshow technique
+var filesDir = '/announce/images'; // Files (JPGs, vidoes) put in this directory can be displayed in the slideshow window with the "Files" button.
+var serverURL = 'http://www.geological-supplies.com/nlife/';
+
+// User-specific settings
+var church = $.parseJSON('{}');
+church.ccli = localStorage.getItem('church.ccli');
+church.name = localStorage.getItem('church.name') || 'Anonymous church';
+var paperWidth = localStorage.getItem('church.paper') || 215.9; // in mm A4: 210; letter: 215.9 // TODO: allow user to set account preference
+var paperHeight = localStorage.getItem('paperHeight') || 279.4; // in mm.  A4: 297; letter: 279.4
+  
+
 if (!navigator.appVersion.match(/\bChrome\//)) {
   alert("Please use Google Chrome to access the worship manager.");
   document.body.innerHTML = "Please use Google Chrome to access the worship manager.";
@@ -20,6 +33,14 @@ if (!navigator.appVersion.match(/\bChrome\//)) {
 }
 
 $(document).ready(function() {
+  // Load user-specific settings
+  if (!church.ccli) {
+    addCoverFrame('No CCLI', '<p>You need to specify your CCLI license number, so that we can\
+    access your song database.</p><p><label for=ccli>CCLI #:</label><input onchange="validateCCLI()"\
+      onkeyup="validateCCLI()" id=ccliInput name=ccli pattern="[0-9]+"></input></p>\
+    <div id=ccliResults class=noResults>No matching churches found.</div>');
+  }
+  
   backToWelcomeSlide();
   if (localStorage.getItem('slideCount') > 0) {
     populateLists(getStoredSlides());
@@ -112,10 +133,33 @@ $(window).bind('beforeunload', function() {
   }
 });
 
-// moveOptionsAcross
-//
-// Move selected options from one select list to another
-//
+
+function validateCCLI() {
+  var noMatch = 'No matching churches found. ';
+  var addChurch = 'Add a church';
+  var ccli = $('#ccliInput').val();
+  if (ccli){
+    $.ajax({
+        url: serverURL + 'php/get_data.php',
+        data: 'ccli=' + ccli,
+        success: function(json) {
+          church = $.parseJSON(json);
+            $('#ccliResults').html(church
+            ? 'Matched <em>' + church.name + '</em> &#151; <a href="javascript:confirmCCLI()">Confirm</a>'
+            : noMatch + addChurch);
+        }
+    });
+  } else {
+    $('#ccliResults').html(noMatch);
+  } 
+}
+
+function confirmCCLI() {
+  localStorage.setItem('ccli', church.ccli);
+  localStorage.setItem('church.name', church.name);
+  removeCoverFrame();
+}
+
 function addToSetList() {
   var selected = $.map($('#fullList :selected'), function(e) {return machineText($(e).text());});
   $('#fullList :selected').remove();
@@ -872,18 +916,7 @@ function searchKeyPress (e) {
 
 // Functions to add songs
 function addSong() {
-  $(document).keyup(function(e) {
-      if (event.keyCode == 27) {
-        removeCoverFrame();
-        $(document).unbind('keyup');
-      }
-    });
-  var coverFrame = $(document.createElement('div'));
-  coverFrame.addClass('greyOut');
-  coverFrame.attr('id', 'coverFrame');
-  coverFrame.append('<div class="slide" id="slideNew">\
-    <div id=coverFrameTitle>Add a slide <span onclick="removeCoverFrame()" id=removeCoverFrame>[x]</span></div>\
-      <div id=slideNewContent>\
+  addCoverFrame('Add a slide', '\
       <p>Paste guitar tab (in <span style="font-family:\'Arial narrow\'">Arial Narrow</span> font) directly into the boxes below; as far as possible,\
       this will automatically be rendered for print and for presentation-mode display (see guide below).</p>\
   \
@@ -946,14 +979,34 @@ function addSong() {
             Asterisks surround echoes (e.g. where women sing a different lyric).</li>\
       </ul>\
     </div>\
-  </div>\
-</div>');
-  
+  '); 
+}
+
+function addCoverFrame(title, content) {
+  $(document).keyup(function(e) {
+      if (event.keyCode == 27) {
+        removeCoverFrame();
+        $(document).unbind('keyup');
+      }
+    });
+  var coverFrame = $(document.createElement('div'));
+  coverFrame.addClass('greyOut');
+  coverFrame.attr('id', 'coverFrame');
+  coverFrame.append('<div class="slide" id="slideNew">\
+    <div id=coverFrameTitle>' + title
+    + '<span onclick="removeCoverFrame()" id=removeCoverFrame>[x]</span></div>\
+      <div id=slideNewContent>'
+    + content + '</div></div>'
+  );
   $('body').append(coverFrame);  
 }
 
 function removeCoverFrame() {
   $('#coverFrame').remove();
+}
+
+function changeSettings() {
+  addCoverFrame('Settings problem.');
 }
 
 function updateSlide() {
