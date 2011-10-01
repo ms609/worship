@@ -18,14 +18,6 @@ var pathToAnnouncements = '../../announce/Announcements-ohp.html'; // Path to an
 var filesDir = '/announce/images'; // Files (JPGs, vidoes) put in this directory can be displayed in the slideshow window with the "Files" button.
 var serverURL = 'http://www.geological-supplies.com/nlife/';
 
-// User-specific settings
-var church = $.parseJSON('{}');
-church.ccli = localStorage.getItem('church.ccli');
-church.name = localStorage.getItem('church.name') || 'Anonymous church';
-var paperWidth = localStorage.getItem('church.paper') || 215.9; // in mm A4: 210; letter: 215.9 // TODO: allow user to set account preference
-var paperHeight = localStorage.getItem('paperHeight') || 279.4; // in mm.  A4: 297; letter: 279.4
-  
-
 if (!navigator.appVersion.match(/\bChrome\//)) {
   alert("Please use Google Chrome to access the worship manager.");
   document.body.innerHTML = "Please use Google Chrome to access the worship manager.";
@@ -39,6 +31,8 @@ $(document).ready(function() {
     access your song database.</p><p><label for=ccli>CCLI #:</label><input onchange="validateCCLI()"\
       onkeyup="validateCCLI()" id=ccliInput name=ccli pattern="[0-9]+"></input></p>\
     <div id=ccliResults class=noResults>No matching churches found.</div>');
+  } else {
+    personalize();
   }
   
   backToWelcomeSlide();
@@ -155,9 +149,14 @@ function validateCCLI() {
 }
 
 function confirmCCLI() {
-  localStorage.setItem('ccli', church.ccli);
+  localStorage.setItem('church.ccli', church.ccli);
   localStorage.setItem('church.name', church.name);
+  personalize();
   removeCoverFrame();
+}
+
+function personalize() {
+  document.title = 'Worship Slide Control | ' + church.name;
 }
 
 function addToSetList() {
