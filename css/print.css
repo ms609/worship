@@ -1,0 +1,63 @@
+/* 
+    Document   : print
+    Created on : 24-Dec-2010, 10:42:59
+    Author     : ms609
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.indent {padding-left: 3.3em !important;}
+.bold     {font-weight: bold;}
+.italic {font-style: italic;}
+.green {padding-left:4.5em;}
+.blue    {padding-left:1.5em;}
+.yellow{padding-left:3em;}
+.white  {padding-left:3em;}
+.printonly {display:block;}
+
+
+.leftcol, .rightcol {width: 48%; overflow: hidden;}
+.leftcol {float: left;}
+.rightcol {float: right;}
+
+.leftcol span, .rightcol span, .nocol span {
+  display: block;
+  line-height: 1.15em;
+  margin-bottom: 0.05em;
+}
+
+h1 {
+  clear: both;
+  margin-bottom: 0;
+}
+
+h2, .ccli {
+  font-size:x-small;
+  font-weight: normal;
+  text-align:right;
+  width:100%;
+  margin: 0;
+}
+
+.chords {
+  font-weight: bold;
+}
+
+.ccli {
+  right: 1em;
+  top: 1em;
+}
+
+.words {
+  font-family: "Arial narrow";
+}
+
+.subtitle {font-size:smaller;}
+
+input {
+  width:2.5em;
+}

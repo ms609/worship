@@ -1,0 +1,44 @@
+/* 
+    Document   : print-page
+    Created on : 24-Dec-2010, 11:06:51
+    Author     : ms609
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+  display: block;
+}
+
+body {
+  font-family: 'Arial narrow', Tahoma, Verdana, Arial, Helvetica, 'Bitstream Vera Sans', sans-serif;
+  margin-left: 1em;
+}
+
+.words {
+  padding-left: 2.5em;
+  margin-top: -1.2em;
+}
+
+.ccli {
+  position: absolute;
+  font-size:x-small;
+  top: -5px;
+}
+
+h2 {
+  clear: both;
+  border-top: solid 2px;
+}
+
+h1 {
+  font-size: large;
+}
+
+header, .screenOnly {
+  display: none;
+}
+
+.newPage {
+  page-break-after: always;
+}

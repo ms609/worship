@@ -1,0 +1,4 @@
+a.b.c.d
+a.b: software version 
+c: svn revision ID in Google Code
+d: iteration within this revision ID

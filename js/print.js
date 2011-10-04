@@ -91,7 +91,7 @@ function pageContents(pageNumber, song) {
       + ' <div class="credit"><h2>'
       + song.credit
       + ' </h2></div>' // /credit
-      + ' <div class="ccli">CCLI license # ' + ccliNumber + '</div>'
+      + ' <div class="ccli">CCLI license # ' + church.ccli + '</div>'
       + ' <div class=screenOnly>Change first chord to:'
       + ' <input type=text id="transposeTarget' + pageNumber
         + '" maxlength=2 onkeyup="transpose(' + "'" + pageNumber

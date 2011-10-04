@@ -16,7 +16,7 @@ function searchify(text) {
 
 
 var priorSearch;
-function updateSearch(fullText) {
+function updateSearch(fullText) { // TODO: [easy] search won't match inher_i_tance with inheritance.  Remove underscores from match terms.
   var slides = getStoredSlides(); //TODO this taxes performance
   var matchCount = 0, searchString = searchify($('#searchBox').val());
   var searchRegExp = new RegExp("\\b" + (searchString + '').replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\-]', 'g'), '\\$&'));

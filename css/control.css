@@ -178,7 +178,8 @@ input.button {
   float: left;
 }
 
-#preview {
+#preview, #previewBackground {
+  background: none;
   border: solid black;
   border-width: 0 5px;
   display: table-row;
@@ -195,7 +196,6 @@ input.button {
   color: #9be;
   border: none;
 }
-
 
 #setListMenu, #selectSetList {
   height: 1.5em;
