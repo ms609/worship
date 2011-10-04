@@ -10,123 +10,127 @@ $(document).ready(function() {
     var text = '</ul><h4 listName="' + machineText(myList) + '">Server version of "' + humanText(myList)
       + '" <a onclick="downloadList(this)">download</a>'
       + ' <a onclick="deleteList(this)">delete</a></h4><ul>'
-    for (var i in serverLists[myList]) {
-        text += '<li>' + humanText(serverLists[myList][i]) + '</li>';
+    for (var i in server.setLists[myList]) {
+        text += '<li>' + humanText(server.setLists[myList][i]) + '</li>';
       }
     return text;
   };
   var list = $("#differentSlides");
-  if (!connection || connection == '0') {
-    list.append("<h2>Error</h2><p>Could not connect to central server.  Check your connection to the internet</p>");
-  } else {
-    $('#differentLists').append(function () {
-      var setLists = '';
-      var newListsOnServer = 0;
-      var localLists = JSON.parse(localStorage.getItem("setLists") || '{}');
-      for (var serverList in serverLists) {
-        if (!localLists[serverList]) {
-            setLists += showServerList(serverList);
-            ++newListsOnServer;
-        }
-      }
-      setLists = '<h2 style="margin-top:3em;">Set list synchronization</h2>'
-        + (newListsOnServer ? '<div><h3>' + newListsOnServer 
-        + ' lists on server, but not this machine</h3><ul class="startCollapsed">' 
-        + setLists + '</ul></div>' : '');
-      for (var list in localLists) {
-        setLists += '<div><h3 value="' + machineText(list) + '">' + humanText(list)
-        + ' <a onclick="uploadList(this)">upload</a> <a onclick="toggleUl(this);">show</a></h3>'
-        + '<ul class="startCollapsed">';
-        for (var i in localLists[list]) {
-          setLists += '<li>' + humanText(localLists[list][i]) + '</li>';
-        }
-        if (serverLists[list]) {
-          setLists += showServerList(list);
-        }
-        setLists += '</ul>'
-        + '</div>';
-      }
-      return setLists;
-    });
-       
-    // Setlists done; now do slides.  Last svn downloaded are saved as "slideDatabase"
-    var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : slideDatabase;
-    var forImmediateUpdate = locallyStored;
-  
-    var i = 0;
-    for (var oSlide in serverDatabase) {
-      if (locallyStored[oSlide]) {} else {
-        var newSlide = array2slide(oSlide, serverDatabase[oSlide]);
-        list.append(choice(++i, oSlide, 'Extra slide on server'));
-        addChange(i, "Slide", "(nothing)", slidePreview(newSlide));
-      }
-    }
+  $.ajax({
+    url: serverURL + 'php/get_data.php',
+    data: 'ccli=' + local.ccli,
+    success: function(json) {
+      console.log(json);
+      var server = JSON.parse(json);
+      if (!server) {
+        list.append("<h2>Error</h2><p>Could not retrieve data from server.  Is your church CCLI, #" + church.ccli + ", correct?</p>");
+      } else {
+        $('#differentLists').append(function () {
+          var setLists = '';
+          var newListsOnServer = 0;
+          var localLists = JSON.parse(localStorage.getItem("setLists") || '{}');
+          for (var serverList in server.setLists) {
+            if (!localLists[serverList]) {
+                setLists += showServerList(serverList);
+                ++newListsOnServer;
+            }
+          }
+          setLists = '<h2 style="margin-top:3em;">Set list synchronization</h2>'
+            + (newListsOnServer ? '<div><h3>' + newListsOnServer 
+            + ' lists on server, but not this machine</h3><ul class="startCollapsed">' 
+            + setLists + '</ul></div>' : '');
+          for (var list in localLists) {
+            setLists += '<div><h3 value="' + machineText(list) + '">' + humanText(list)
+            + ' <a onclick="uploadList(this)">upload</a> <a onclick="toggleUl(this);">show</a></h3>'
+            + '<ul class="startCollapsed">';
+            for (var i in localLists[list]) {
+              setLists += '<li>' + humanText(localLists[list][i]) + '</li>';
+            }
+            if (server.setLists[list]) {
+              setLists += showServerList(list);
+            }
+            setLists += '</ul>'
+            + '</div>';
+          }
+          return setLists;
+        });
 
-    for (oSlide in locallyStored) {
-      // Load slide details
-      var mySlide = new Slide(oSlide,
-                          locallyStored[oSlide]["author"],
-                          locallyStored[oSlide]["copyright"],
-                          locallyStored[oSlide]["text"],
-                          locallyStored[oSlide]["size"]);
+        // Setlists done; now do slides.  Last svn downloaded are saved as "slideDatabase"
+        var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
+        var serverDatabase = server.songs ? JSON.parse(server.songs) : {};
+        var forImmediateUpdate = locallyStored;
 
-      if (serverDatabase[oSlide]) {
-        // A slide of this name exists on server
-        var serverSlide = new Slide(oSlide,
-                                serverDatabase[oSlide]["author"],
-                                serverDatabase[oSlide]["copyright"],
-                                serverDatabase[oSlide]["text"],
-                                serverDatabase[oSlide]["size"]);
-        if (locallyStored[oSlide]['modified']) {
-          if (mySlide.text == serverSlide.text) {
-            var modifications = $(document.createElement("div"));
-            modifications.append("<h2>Modified slide in local storage" + 
-              locallyStored[oSlide]['modified'] + ".</h2>");
-            var modified = false;
-            var props = Array("author", "copyright", "size");
-            for (var prop in props) {
-              if (serverDatabase[oSlide][props[prop]] != locallyStored[oSlide][props[prop]]) {
-                if (!modified) {
-                  list.append(choice(++i, oSlide, "Properties modified in local storage"));
-                  modified = true;
+        var i = 0;
+        for (var oSlide in serverDatabase) {
+          if (locallyStored[oSlide]) {} else {
+            var newSlide = array2slide(oSlide, serverDatabase[oSlide]);
+            list.append(choice(++i, oSlide, 'Extra slide on server'));
+            addChange(i, "Slide", "(nothing)", slidePreview(newSlide));
+          }
+        }
+
+        for (oSlide in locallyStored) {
+          // Load slide details
+          var mySlide = new Slide(oSlide,
+                              locallyStored[oSlide]["author"],
+                              locallyStored[oSlide]["copyright"],
+                              locallyStored[oSlide]["text"],
+                              locallyStored[oSlide]["size"]);
+
+          if (serverDatabase[oSlide]) {
+            // A slide of this name exists on server
+            var serverSlide = new Slide(oSlide,
+                                    serverDatabase[oSlide]["author"],
+                                    serverDatabase[oSlide]["copyright"],
+                                    serverDatabase[oSlide]["text"],
+                                    serverDatabase[oSlide]["size"]);
+            if (locallyStored[oSlide]['modified']) {
+              if (mySlide.text == serverSlide.text) {
+                var modifications = $(document.createElement("div"));
+                modifications.append("<h2>Modified slide in local storage" + 
+                  locallyStored[oSlide]['modified'] + ".</h2>");
+                var modified = false;
+                var props = Array("author", "copyright", "size");
+                for (var prop in props) {
+                  if (serverDatabase[oSlide][props[prop]] != locallyStored[oSlide][props[prop]]) {
+                    if (!modified) {
+                      list.append(choice(++i, oSlide, "Properties modified in local storage"));
+                      modified = true;
+                    }
+                    addChange(i, props[prop], locallyStored[oSlide][props[prop]], serverDatabase[oSlide][props[prop]])
+                  }
                 }
-                addChange(i, props[prop], locallyStored[oSlide][props[prop]], serverDatabase[oSlide][props[prop]])
+              } else {
+                // Text modified
+                list.append(choice(++i, oSlide, "Content modified in local storage")); // Header row
+                addChange (i, "Slides", slidePreview(mySlide, "_mine", serverSlide), slidePreview(serverSlide, "_serv", mySlide));
               }
+            } else {
+              // Update from server without prompting
+              forImmediateUpdate[oSlide] = (serverDatabase[oSlide] || locallyStored[oSlide])
+              forImmediateUpdate[oSlide]['modified'] = false;
             }
           } else {
-            // Text modified
-            list.append(choice(++i, oSlide, "Content modified in local storage")); // Header row
-            addChange (i, "Slides", slidePreview(mySlide, "_mine", serverSlide), slidePreview(serverSlide, "_serv", mySlide));
+            // This is a new slide
+            if (oSlide) {
+              list.append(choice(++i, oSlide, "Extra slide in local storage"));
+              addChange(i, "Slide", slidePreview(mySlide), "(nothing)");
+            }
           }
-        } else {
-          // Update from server without prompting
-          forImmediateUpdate[oSlide] = (serverDatabase[oSlide] || locallyStored[oSlide])
-          forImmediateUpdate[oSlide]['modified'] = false;
         }
-      } else {
-        // This is a new slide
-        if (oSlide) {
-          list.append(choice(++i, oSlide, "Extra slide in local storage"));
-          addChange(i, "Slide", slidePreview(mySlide), "(nothing)");
-        }
+        setStoredSlides(forImmediateUpdate);
+        list.append('<h2 style="margin-top:3em;">Enact the above changes</h2>'
+          + '<input type="button" class="bigButton" name="commit" value="Synchronize!" onclick="commitChanges();" />'
+          + '<label for=commit id=ajaxResult>[Click to update the server]</label>'
+        );
       }
+    },
+    error: function () {
+      // TODO automatic retry
+      list.append("<h2>Error</h2><p>Could not connect to central server.  Check your connection to the internet</p>");
     }
-    setStoredSlides(forImmediateUpdate);
-    list.append('<h2 style="margin-top:3em;">Enact the above changes</h2>'
-      //+ '<form id="commitForm" method="post" action="http://www.geological-supplies.com/nlife/php/commit.php" onsubmit="commitChanges();">'
-      //+ '<form id="commitForm" method="post" action="php/commit.php" onsubmit="commitChanges();">'
-      //+ '<input type="button" class="bigButton" name="preview" value="Preview!" onclick="commitChanges();" />'
-      //+ '<textarea name="newJSON" id="newJSON" rows=10></textarea>'
-      //+ '<input type="text" name="newJSON" id="newJSON" />'
-      + '<input type="button" class="bigButton" name="commit" value="Synchronize!" onclick="commitChanges();" />'
-      + '<label for=commit id=ajaxResult>[Click to update the server]</label>'
-      //+ '</form>'
-      );
-  }
-  if (!document.location.href.match(serverURL)) {
-    $('#flush').append('<br /><span>It might be worth running a SVN update before flushing.</span>');
-  }   
- });
+  }); 
+});
 
 function choice(id, title, caption) {
   var out = $(document.createElement("div"));
@@ -226,7 +230,7 @@ function commitChanges() {
     $('#ajaxResult').html("Communicating with server; please don't close the window...");
     $('#commitButton').attr("disabled", "true");
     $.ajax({
-      "url": "http://www.geological-supplies.com/nlife/php/commit.php",
+      "url": "http://www.geological-supplies.com/nlife/php/.....",
       "data": toCommit,
       "type": "POST",
       "success": function (data) {
@@ -272,6 +276,21 @@ function slidePreview(slide, id, cfSlide) {
   }
 });*/
 
+// This function taken from http://stackoverflow.com/questions/5224197
+function ifServerOnline(ifOnline, ifOffline) {
+  var img = document.body.appendChild(document.createElement("img"));
+  img.onload = function()
+  {
+    $(img).remove();
+    ifOnline && ifOnline.constructor == Function && ifOnline();
+  };
+  img.onerror = function()
+  {
+    $(img).remove();
+    ifOffline && ifOffline.constructor == Function && ifOffline();
+  };
+  img.src = serverURL + 'php/ping.png';
+}
 
 function toggleUl(item) {
   var ul = $(item).parent().next("ul");

@@ -5,13 +5,15 @@
  * Song content only available under terms of the CCLI.
  */
 
+var serverURL = 'http://www.geological-supplies.com/nlife/';
 
-var church = {};
-church.ccli = localStorage.getItem('church.ccli');
-church.name = localStorage.getItem('church.name') || 'Anonymous church';
-church.songs = localStorage.getItem('church.songs') || '{}';
-church.setLists = localStorage.getItem('church.setLists') || '{}';
+var local = {};
+local.ccli = localStorage.getItem('ccli');
+local.name = localStorage.getItem('churchName') || 'Anonymous church';
+local.songs = localStorage.getItem('slides') || '{}';
+local.setLists = localStorage.getItem('setLists') || '{}';
 
-var slideDatabase = JSON.parse(church.songs);
-var paperWidth = localStorage.getItem('church.paper') || 215.9; // in mm A4: 210; letter: 215.9 // TODO: allow user to set account preference
+var slideDatabase = JSON.parse(local.songs);
+var paperSize = localStorage.getItem('paperSize') || 215.9; // in mm A4: 210; letter: 215.9 // TODO: allow user to set account preference
+var paperWidth = localStorage.getItem('paperWidth') || 215.9; // in mm A4: 210; letter: 215.9 // TODO: allow user to set account preference
 var paperHeight = localStorage.getItem('paperHeight') || 279.4; // in mm.  A4: 297; letter: 279.4

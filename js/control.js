@@ -18,7 +18,6 @@ var imgGreen = 'data:image/png;base64,' + greenCircle;
 // Esoteric settings
 var pathToAnnouncements = '../../announce/Announcements-ohp.html'; // Path to an announcements file using the S5 slideshow technique
 var filesDir = '/announce/images'; // Files (JPGs, vidoes) put in this directory can be displayed in the slideshow window with the "Files" button.
-var serverURL = 'http://www.geological-supplies.com/nlife/';
 
 if (!navigator.appVersion.match(/\bChrome\//)) {
   alert("Please use Google Chrome to access the worship manager.");
@@ -28,7 +27,7 @@ if (!navigator.appVersion.match(/\bChrome\//)) {
 
 $(document).ready(function() {
   // Load user-specific settings
-  if (!church.ccli) {
+  if (!local.ccli) {
     addCoverFrame('No CCLI', '<p>You need to specify your CCLI license number, so that we can\
     access your song database.</p><p><label for=ccli>CCLI #:</label><input onchange="validateCCLI()"\
       onkeyup="validateCCLI()" id=ccliInput name=ccli pattern="[0-9]+"></input></p>\
@@ -134,32 +133,31 @@ function validateCCLI() {
   var noMatch = 'No matching churches found. ';
   var addChurch = 'Add a church';
   var ccli = $('#ccliInput').val();
-  if (ccli){
+  if (ccli) { 
     $.ajax({
-        url: serverURL + 'php/get_data.php',
-        data: 'ccli=' + ccli,
-        success: function(json) {
-          church = $.parseJSON(json);
-            $('#ccliResults').html(church
-            ? 'Matched <em>' + church.name + '</em> &#151; <a href="javascript:confirmCCLI()">Confirm</a>'
-            : noMatch + addChurch);
-        }
-    });
-  } else {
-    $('#ccliResults').html(noMatch);
-  } 
+      url: serverURL + 'php/get_data.php',
+      data: 'ccli=' + ccli,
+      success: function(json) {
+        local = $.parseJSON(json);
+          $('#ccliResults').html(local
+          ? 'Matched <em>' + local.name + '</em> &#151; <a href="javascript:confirmCCLI()">Confirm</a>'
+          : noMatch + addChurch);
+      }
+    }); 
+  }
+  else $('#ccliResults').html(noMatch);
 }
 
 function confirmCCLI() {
-  localStorage.setItem('church.ccli', church.ccli);
-  localStorage.setItem('church.name', church.name);
+  localStorage.setItem('ccli', local.ccli);
+  localStorage.setItem('churchName', local.name);
   personalize();
   removeCoverFrame();
 }
 
 function personalize() {
-  document.title = 'Worship Slide Control | ' + church.name;
-  if (church.background) document.getElementById('previewBackground').src = 'data:image/png;base64,' + church.background;
+  document.title = 'Worship Slide Control | ' + local.name;
+  if (local.background) document.getElementById('previewBackground').src = 'data:image/png;base64,' + local.background;
   document.getElementById('previewBackground').src = 'data:image/png;base64,' + greenCircle;
 }
 
