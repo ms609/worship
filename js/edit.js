@@ -1,12 +1,11 @@
 // Generates slide content and edit-boxes from json file or localStorage
 var lastJSON = {};
 
-
 $(document).ready(function(){
   if (localStorage.getItem("slideCount") > 0) {
    parseEditSlides($('.presentation'), getStoredSlides(true), false);
   } else { 
-   parseEditSlides($('.presentation'), slideDatabase, true);
+   parseEditSlides($('.presentation'), local.songs, true);
   }
 });
 
@@ -106,7 +105,7 @@ function updateSlide(i, modified) {
 
 function resetSlide(i) {
   var originalTitle = $("#formerTitle" + i).val(); // will be in humanText format
-  var slide = slideDatabase[originalTitle];
+  var slide = local.songs[originalTitle];
   $("#sectionTitle" + i).html(parseSlideTitle(originalTitle));
   $("#previewTitle" + i).html(parseSlideTitle(originalTitle));
   $("#songTitle" + i).val(originalTitle);

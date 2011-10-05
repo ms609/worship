@@ -40,7 +40,7 @@ $(document).ready(function() {
   if (localStorage.getItem('slideCount') > 0) {
     populateLists(getStoredSlides());
   } else {
-    populateLists(slideDatabase);
+    populateLists(local.songs);
   }
   var currentSetList = localStorage.getItem('currentSetList') || "New";
   //TODO: check that the speech marks are appropriate
@@ -151,6 +151,10 @@ function validateCCLI() {
 function confirmCCLI() {
   localStorage.setItem('ccli', local.ccli);
   localStorage.setItem('churchName', local.name);
+  clearSetList();
+  $('#fullList option').remove();
+  populateLists(JSON.parse(local.songs));
+  
   personalize();
   removeCoverFrame();
 }

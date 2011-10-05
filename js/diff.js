@@ -55,9 +55,9 @@ $(document).ready(function() {
           return setLists;
         });
 
-        // Setlists done; now do slides.  Last svn downloaded are saved as "slideDatabase"
+        // Setlists done; now do slides.  Last svn downloaded are saved as "local.songs"
         var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
-        var serverDatabase = server.songs ? JSON.parse(server.songs) : {};
+        serverDatabase = server.songs ? JSON.parse(server.songs) : {};
         var forImmediateUpdate = locallyStored;
 
         var i = 0;
@@ -119,9 +119,10 @@ $(document).ready(function() {
           }
         }
         setStoredSlides(forImmediateUpdate);
-        list.append('<h2 style="margin-top:3em;">Enact the above changes</h2>'
-          + '<input type="button" class="bigButton" name="commit" value="Synchronize!" onclick="commitChanges();" />'
-          + '<label for=commit id=ajaxResult>[Click to update the server]</label>'
+        list.append('<h2 style="margin-top:3em;">Enact the above changes</h2>\
+             <input type="button" class="bigButton" name="commit" value="Synchronize!"\
+             onclick="commitChanges();" />\
+             <label for=commit id=ajaxResult>[Click to update the server]</label>'
         );
       }
     },
@@ -183,7 +184,7 @@ function choose (choice, i) {
 
 function commitChanges() {
   var toCommit = serverDatabase;
-  var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : slideDatabase;
+  var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
   var forLocal = locallyStored;
   var addedSlides = '';
   var deletedSlides = '';
@@ -219,18 +220,15 @@ function commitChanges() {
     }
   });
   setStoredSlides(forLocal);
-  var logMessage = (addedSlides ? "Added: " + addedSlides : "")
-                 + (deletedSlides ? "Deleted: " + deletedSlides : "")
-                 + (modifiedSlides ? "Modified (/added): " + modifiedSlides : "");
-
   // Add svn_log_message last; this will both provide a log message for the svn commit,
   // and act as a "end of file" marker to confirm that the connection has not been interrupted.
-  toCommit["svn_log_message"] = (logMessage || "No details generated");
+  toCommit['ccli'] = local.ccli;
   if (serverModified) {
     $('#ajaxResult').html("Communicating with server; please don't close the window...");
     $('#commitButton').attr("disabled", "true");
+    console.log(toCommit);
     $.ajax({
-      "url": "http://www.geological-supplies.com/nlife/php/.....",
+      "url": "http://www.geological-supplies.com/nlife/php/put_songs.php",
       "data": toCommit,
       "type": "POST",
       "success": function (data) {
@@ -272,7 +270,7 @@ function slidePreview(slide, id, cfSlide) {
   if (localStorage.getItem("slideCount")) {
     parseDisplaySlides($('.presentation'), getStoredSlides());
   } else {
-    parseDisplaySlides($('.presentation'), slideDatabase);
+    parseDisplaySlides($('.presentation'), local.songs); (local.songs was previously slideDatabase.)
   }
 });*/
 
