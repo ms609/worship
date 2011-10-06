@@ -5,7 +5,7 @@ $(document).ready(function(){
   if (localStorage.getItem("slideCount") > 0) {
    parseEditSlides($('.presentation'), getStoredSlides(true), false);
   } else { 
-   parseEditSlides($('.presentation'), local.songs, true);
+   parseEditSlides($('.presentation'), slideDatabase, true);
   }
 });
 
@@ -105,7 +105,7 @@ function updateSlide(i, modified) {
 
 function resetSlide(i) {
   var originalTitle = $("#formerTitle" + i).val(); // will be in humanText format
-  var slide = local.songs[originalTitle];
+  var slide = slideDatabase[originalTitle];
   $("#sectionTitle" + i).html(parseSlideTitle(originalTitle));
   $("#previewTitle" + i).html(parseSlideTitle(originalTitle));
   $("#songTitle" + i).val(originalTitle);

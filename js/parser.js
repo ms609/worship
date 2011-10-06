@@ -1,5 +1,5 @@
 // TODO here: http://code.google.com/speed/articles/optimizing-javascript.html
-function Slide (title, author, copyright, text, size, key, capo) {
+function Slide (title, author, copyright, text, size) {
   // If missing data, load it
   if (typeof(author) == 'undefined') {
     var allSlides = JSON.parse(localStorage.getItem('slides'));
@@ -131,10 +131,6 @@ function Slide (title, author, copyright, text, size, key, capo) {
   this.preview = parseDivs(this.parsedText, size, this.credit);
 
   this.size = size;
-
-  this.key = key;
-
-  this.capo = capo;
 }
 
 function renderChords (line) {

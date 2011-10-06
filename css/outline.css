@@ -32,7 +32,6 @@ html>body #toggle {position: fixed; top: 0; right: 0;}
 
 .slidecontent {
   background-color:black;
-  background-image: url('../ui/default/background.jpg');
   background-position: bottom right;
   background-size: 100%;
   color:white;

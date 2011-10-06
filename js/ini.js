@@ -12,6 +12,7 @@ local.ccli = localStorage.getItem('ccli');
 local.name = localStorage.getItem('churchName') || 'Anonymous church';
 local.songs = localStorage.getItem('slides') || '{}';
 local.setLists = localStorage.getItem('setLists') || '{}';
+local.background = localStorage.getItem('background') || '{}';
 
 var slideDatabase = JSON.parse(local.songs);
 var paperSize = localStorage.getItem('paperSize') || 215.9; // in mm A4: 210; letter: 215.9 // TODO: allow user to set account preference

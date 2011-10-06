@@ -12,8 +12,6 @@ var allSongTitles = [];
 var slideshow;
 var onScreenNow = '';
 var slidePosition = {'sermon' : 0, 'announcements' : 0};
-var greenCircle = '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'
-var imgGreen = 'data:image/png;base64,' + greenCircle;
 
 // Esoteric settings
 var pathToAnnouncements = '../../announce/Announcements-ohp.html'; // Path to an announcements file using the S5 slideshow technique
@@ -38,9 +36,9 @@ $(document).ready(function() {
   
   backToWelcomeSlide();
   if (localStorage.getItem('slideCount') > 0) {
-    populateLists(getStoredSlides());
+    populateLists(JSON.parse(localStorage.getItem("slides")));
   } else {
-    populateLists(local.songs);
+    populateLists(slideDatabase);
   }
   var currentSetList = localStorage.getItem('currentSetList') || "New";
   //TODO: check that the speech marks are appropriate
@@ -151,9 +149,12 @@ function validateCCLI() {
 function confirmCCLI() {
   localStorage.setItem('ccli', local.ccli);
   localStorage.setItem('churchName', local.name);
+  localStorage.setItem('background', local.background);
+  localStorage.setItem('worshipSlide', local.worship);
   clearSetList();
-  $('#fullList option').remove();
-  populateLists(JSON.parse(local.songs));
+  $('#fullList option').remove(); 
+  slideDatabase = JSON.parse(local.songs);
+  populateLists(slideDatabase);
   
   personalize();
   removeCoverFrame();
@@ -161,8 +162,7 @@ function confirmCCLI() {
 
 function personalize() {
   document.title = 'Worship Slide Control | ' + local.name;
-  if (local.background) document.getElementById('previewBackground').src = 'data:image/png;base64,' + local.background;
-  document.getElementById('previewBackground').src = 'data:image/png;base64,' + greenCircle;
+  if (local.background) $('.slidecontent').css({'background-image': 'url(' + local.background + ')'});
 }
 
 function addToSetList() {
@@ -210,12 +210,18 @@ function newSetListItem(item, i) {
   x.addClass("rmButton");
   x.click(function () {removeSetListItem($(this).parent());});
 
+  var ed = $(document.createElement("span"));
+  ed.html("&#9997;");
+  ed.addClass("editButton");
+  ed.click(function () {editSong($(this).parent());});
+
   var showNow = $(document.createElement("span"));
   showNow.html("&#9654;");
   showNow.addClass("showNowButton");
   showNow.click(function () {itemToScreen($(this).parent().attr('position'));});
 
   add.append(x);
+  add.append(ed);
   add.append(title);
   add.append(showNow);
   $("#setList").append(add);
@@ -267,7 +273,7 @@ function clearSetList() {
 
 // item should be an $ object
 function removeSetListItem(item) {
-  addFullListItem(item.attr("value"));
+  addFullListItem(machineText(item.find('.setListTitle').html()));
   var fullList = document.getElementById('fullList');
   var replaceFullList = removeToInsertLater(fullList);
   sortFullList();
@@ -610,7 +616,7 @@ function previewSlide(title) {
 
 function activatePreviews () {
   $('.setListItem').not(':first').mouseover(function() {
-    previewSlide($(this).val());
+    previewSlide(machineText($(this).find('.setListTitle').html()));
   });
   
   $('#fullList option').mouseover(function() {
@@ -924,10 +930,9 @@ function addSong() {
   addCoverFrame('Add a slide', '\
       <p>Paste guitar tab (in <span style="font-family:\'Arial narrow\'">Arial Narrow</span> font) directly into the boxes below; as far as possible,\
       this will automatically be rendered for print and for presentation-mode display (see guide below).</p>\
-  \
       <div class=handout style="width: 800px;">\
         <div id="rightP" style="float:right; width: 400px;">\
-          <div class="slidecontent">\
+          <div id="slidePreview" class="slidecontent">\
             <h1 id="previewTitle">Slide preview</h1>\
             <div class="words" id="slideText">\
             </div>\
@@ -951,40 +956,95 @@ function addSong() {
       <label for="size">Display font size: </label>\
       <input type="text" id="fontSize" onKeyUp="updateSlide();" name="size" tabindex="5"\
              size="3" maxlength="5" />%\
-      <span style="visibility:hidden">\
-      <label for="key">Key:</label>\
-      <input type="text" name="key" id="key" size="2" maxlength="2" tabindex="6" />\
-      <label for="capo">Capo: </label>\
-      <input type="text" name="capo" id="capo" size="1" maxlength="1" tabindex="7" />\
-      <br />\
-      </span>\
-      <p id="slideAddition"><input type="button" onclick="addSlide();" value="Add this slide" tabindex="8" /><span id=additionMsg></span></p>\
+      <p id="slideUpdate"><input type="button" onclick="addSlide();"\n\
+        value="Add this slide " tabindex="8" /><span id=updateMsg></span></p>\
+      <h3>Formatting commands</h3>' + formattingCommands + '</div>\
+  '); 
+}
+
+function editSong(container) {
+  var song = new Slide(machineText(localStorage.getItem('slide' + $(container).attr('position'))));
+  addCoverFrame('Edit slide: <span id="originalTitle" slidePos="'
+    + $(container).attr('position') + '">' + humanText(song.title) + '</span>',
+      '<div class=handout style="width: 800px;">\
+        <div id="rightP" style="float:right; width: 400px; position: relative">\
+          <div id="slidePreview" class="slidecontent">'
+        + song.slideContent
+        + '</div>\
+        </div>\
+      <div style="float:left; width: 380px;">\
+        <label for="title">Title: </label>\
+        <input type="text" class="title" name="title" id="songTitle" tabindex="1"\
+          placeholder="' + song.plainTitle + '" value="' + song.plainTitle + '"\n\
+          onKeyUp="updateSlide();" />\
+      <textarea name="text" id="editText" rows="17" tabindex="2"\
+              onKeyUp="updateSlide();" style="width:100%;">' + song.text + '</textarea>\
+      </div>\
+    </div>\
+    <div class="handout" id="rubric" style="clear:both;">\
+      <label for="author">Author: </label>\
+      <input type="text" name="author" id="authorName" tabindex="3"\
+             onKeyUp="updateSlide(); value="' + song.author + '" />\
+      <label for="copyright">Copyright: &copy;</label>\
+      <input type="text" id="copy" tabindex="4" value="' + song.copyright + '"\
+                    name="copyright" onKeyUp="updateSlide();" />\
+      <label for="size">Display font size: </label>\
+      <input type="text" id="fontSize" onKeyUp="updateSlide();" name="size" tabindex="5"\
+             size="3" maxlength="5"  value="' + song.size + '" />%\
+      <p id="slideAddition"><input type="button" onclick="doEdit();" value="Update now" tabindex="8" /><span id=additionMsg></span></p>\
       <h3>Formatting commands</h3>\
       <ul style="font-size:smaller;">\
-        <li>#Chorus <br /> marks out the following block of text as a chorus.  (Not case-sensitive.)\
-        <ul>\
-          <li>#Chorus 2, #Bridge, #Middle 8, #Outro<br />\
-                  alternatives will use different colours on slides and different indentation on print</li>\
-          <li>#blue, yellow, indent, italic, white, etc<br />\
-                   format this chorus accordingly.<br />\
-              e.g. #Chorus blue indent will colour and indent the chorus accordingly.</li>\
-          <li>#PrintOnly, #ChordsOnly, #ScreenOnly<br />\
-                only display on printouts, chord sheets, or the presentation-mode screen, respectively.</li>\
-        </ul></li>\
-        <li>---<br />\
-            Split into two columns at this point, on the screen.</li>\
-        <li>===<br />\
-            Split chord printout into two columns here.  Also split the screen display, unless --- appears somewhere else.</li>\
-        <li>_<br />\
-              Use an under_score to indicate a held note in a word, to space out the chord printout correctly.  These will not display on screen.</li>\
-        <li> &gt; <br />\
-              Put on the end of a line, and at the beginning of the next, to force two\
-        lines (in the print out) to run into one line (on screen).</li>\
-        <li>* echo *<br />\
-            Asterisks surround echoes (e.g. where women sing a different lyric).</li>\
-      </ul>\
-    </div>\
+        <li>#Chorus <br /> marks out the following block of text as a chorus.  (Not case-sensitive.)'
+      + formattingCommands + '</div>\
   '); 
+}
+
+function editSettings() {
+  addCoverFrame('Church settings: CCLI # ' + local.ccli,
+      '<div>\
+         <p><form><label for=name>Church name:</label><input name="name" id="newName" value="'
+    + local.name + '" /><input type=button value="Update" onclick="updateName();">\
+    <span id="nameStatus"></span></form></p>\
+         <iframe class="upload" src="' + serverURL + 'php/upload_background.php" />\
+          <input type="button" value="Update" onclick="updateBackground();" />\
+      <p><form enctype="multipart/form-data"><label for=welcome>Welcome slide:</label><input name="welcome"\
+          id="welcomeImage" type="file"\
+          alt="Upload an image to use as a \'Welcome slide\'" />\
+          <input type=button value="Update"></p>\
+    <span id="welcomeStatus"></span></form></p>\
+        </div>\
+  ');
+}
+
+function updateName() {
+  var myData = {
+    'ccli' : local.ccli,
+    'name' : $('#newName').val()
+  };
+  $.ajax({
+    url: serverURL + 'php/put_data.php',
+    type: 'POST',
+    data: myData,
+    success: function(json) {
+      $('#nameStatus').html('Updated. ' + json);
+      local.name = $('#newName').val();
+      localStorage.setItem('churchName', $('#newName').val());
+      personalize();
+    }
+  });
+}
+
+function updateBackground () {
+  $.ajax({
+    url: serverURL + 'php/get_data.php',
+    data: 'ccli=' + local.ccli,
+    success: function(json) {
+      var server = $.parseJSON(json); 
+      local.background = server.background;
+      localStorage.setItem('background', server.background);
+      personalize();
+    }
+  }); 
 }
 
 function addCoverFrame(title, content) {
@@ -1014,23 +1074,26 @@ function changeSettings() {
   addCoverFrame('Settings problem.');
 }
 
+function userSlide() {
+  return new Slide (
+      $('#songTitle').val() ? $('#songTitle').val() : "Untitled slide",
+      $('#authorName').val(),
+      $('#copy').val(),
+      $('#editText').val(),
+      $('#fontSize').val());
+ }
+ 
 function updateSlide() {
-  $('#slideText').html(function() {
-    var size = $('#fontSize').val();
-    var author =  $('#authorName').val();
-    var copy = $('#copy').val();
-    var text = $('#editText').val();
-    var parseResult = parseSlide(text);
-    return parseDivs(parseResult, size, parseCredit(author, copy));
+  $('#slidePreview').html(function() {
+    var song = userSlide();
+    return song.slideContent;
   });
-  var parsedTitle = $('#songTitle').val() ? parseSlideTitle($('#songTitle').val()) : "Untitled slide";
-  $('#previewTitle').html(parsedTitle);
 }
 
 function addSlide() {
   localStorage.setItem('slideCount', localStorage.getItem('slideCount') + 1);
   if ($('#songTitle').val() != "") {
-    var storedSlides = getStoredSlides(true);
+    var storedSlides = getStoredSlides(true); // TODO check whether we can replace with JSON.parse(localStorage.getItem("slides")); to dispence with localStorage.js
     storedSlides[machineText($('#songTitle').val())] = {
       "size": $('#fontSize').val(),
       "author":  $('#authorName').val(),
@@ -1044,7 +1107,7 @@ function addSlide() {
     setStoredSlides(storedSlides);
     $('#setList').empty();
     $('#fullList').empty();
-    populateLists(getStoredSlides());
+    populateLists(JSON.parse(localStorage.getItem("slides")));
     // Clear the Add Slide dialog
     $('input[type=text]').each( function () {
       $(this).val("");
@@ -1062,6 +1125,59 @@ function addSlide() {
     $('#additionMsg').html("<p>Slide not added - specify a title</p>");
   }
 }
+
+function doEdit() {
+  var original = new Slide (machineText($('#originalTitle').html()));
+  original.position =  $('#originalTitle').attr('slidePos');
+  var current = userSlide();
+  if (original.title != current.title) {
+    localStorage.setItem('slide' + original.position, current.title);
+    $('#setListSong' + original.position + ' .setListTitle').html(current.title);
+    $('#originalTitle').html(current.title);
+    delete slideDatabase[original.underscoreTitle];
+  }
+  slideDatabase[current.underscoreTitle] = {
+    'author' : current.author,
+    'copyright' : current.copyright,
+    'modified' : true,
+    'size' : current.size,
+    'text' : current.text
+  }
+  localStorage.setItem('slides', JSON.stringify(slideDatabase));
+  if (original.position == localStorage.getItem('currentSlide')) {
+    showSlideCalled(current.underscoreTitle);
+  }
+  activatePreviews();
+  $('#additionMsg').html("<p>Slide updated.  <a title='Close this screen' \
+      href='javascript:removeCoverFrame();'>\
+      Click here</a> or press <code>Esc</code> to close this window.</p>");
+}
+
+var formattingCommands = 
+      '<ul style="font-size:smaller;">\
+        <li>#Chorus <br /> marks out the following block of text as a chorus.  (Not case-sensitive.)\
+        <ul>\
+          <li>#Chorus 2, #Bridge, #Middle 8, #Outro<br />\
+                  alternatives will use different colours on slides and different indentation on print</li>\
+          <li>#blue, yellow, indent, italic, white, etc<br />\
+                   format this chorus accordingly.<br />\
+              e.g. #Chorus blue indent will colour and indent the chorus accordingly.</li>\
+          <li>#PrintOnly, #ChordsOnly, #ScreenOnly<br />\
+                only display on printouts, chord sheets, or the presentation-mode screen, respectively.</li>\
+        </ul></li>\
+        <li>---<br />\
+            Split into two columns at this point, on the screen.</li>\
+        <li>===<br />\
+            Split chord printout into two columns here.  Also split the screen display, unless --- appears somewhere else.</li>\
+        <li>_<br />\
+              Use an under_score to indicate a held note in a word, to space out the chord printout correctly.  These will not display on screen.</li>\
+        <li> &gt; <br />\
+              Put on the end of a line, and at the beginning of the next, to force two\
+        lines (in the print out) to run into one line (on screen).</li>\
+        <li>* echo *<br />\
+            Asterisks surround echoes (e.g. where women sing a different lyric).</li>\
+      </ul>'
+
 
 /* Here is a centralized TODO list
  * Adding a new slide, then putting it into the setlist, means that the slide AFTER the new one won't display.

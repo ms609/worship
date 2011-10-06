@@ -12,20 +12,39 @@
   /* border-radius: 15px; */
 }
 
-.shadow, .setListItem, #slideNew, #preview {
+.shadow, .setListItem, #slideNew, #preview, header {
   -webkit-box-shadow: 2px 2px 3px #9F9999;
   box-shadow: 3px 3px 4px #9F9999;
+}
+
+header {
+  -webkit-box-shadow:  0px 2px 3px #9F9999;
+  box-shadow: 0px 3px 4px #9F9999;
+}
+
+iframe.upload {
+  height: 3em; 
+  width: 400px;
+  border: 0;
 }
 
 .setListItem.over {
   border-bottom: double 3px #111;
 }
 
-.rmButton, .showNowButton {
+.rmButton, .showNowButton, .editButton {
   display: inline-block;
   font-size: 180%;
   padding: 0 0.4em;
   cursor: default;
+}
+
+.editButton {
+  padding-left: 0;
+}
+
+.rmButton {
+  padding-right: 0.2em;
 }
 
 .showNowButton {
@@ -179,7 +198,7 @@ input.button {
 }
 
 #preview, #previewBackground {
-  background: none;
+  background: black;
   border: solid black;
   border-width: 0 5px;
   display: table-row;
