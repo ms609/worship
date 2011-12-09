@@ -1,4 +1,4 @@
-/* localStorage variables:
+/* localStorage variables: 
 //
 // setListLength:  slides in set list
 // slide# : name of slide at position # in list.  First slide is 0.
@@ -512,15 +512,6 @@ function setListToStorage() {
 	localStorage.setItem('setListLength', setListLength);
 }
 
-function launch(callback) {
-  // TODO: re-jig this function.  Back and advance should be enabled from the start.  This should just switch the view to the set list, with a separate function opening slideshow.
-  setScreen('songs');
-  $("#fullTextSearch").attr("checked", true);
-  if (callback) {
-    setTimeout(callback, 250);
-  }
-}
-
 function startSlideshow(callback) {
   slideshow = window.open(getUrl(onScreenNow || 'welcome'), "SlideShowWindow", "resizable=1,width=400,height=300,location=0");
   slideshow.moveTo(1138,0);
@@ -820,7 +811,8 @@ function toBlankSlide() {
 }
 // TODO: when adding a slide and pressing 'esc' to close the add slide dialog, the slideshow screen goes blank
 
-function setScreen(view) { 
+function setScreen(view) {
+  console.log(view);
   switch (view) {
     case 'announcements': case 'sermon':
       $("#launchButton").val("Worship");
@@ -840,6 +832,10 @@ function setScreen(view) {
     break;
     case 'blankSlide':
       setTimeout('updateBlankSlide()', 300);
+      activeView('setList');
+    break;
+    case 'welcome':
+      $("#fullTextSearch").attr("checked", true);
       activeView('setList');
     break;
   }
@@ -874,6 +870,7 @@ function getUrl(view) {
   
 
 function activeView(view) {
+  console.log(view);
   $('#announcementPreview').css('display', 'none');
   $('#setList').css('display', 'none');
   $('#filesList').css('display', 'none');
