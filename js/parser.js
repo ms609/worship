@@ -294,7 +294,7 @@ function countSpaces(text) {
 }
 
 function machineText(text) {
-  return (text ? text.replace(/\s/g, "_").replace(/'|&rsquo;/g, '\u2019') : ''); // &rsquo; or ’
+  return (text ? text.replace(/\s/g, "_").replace(/'|&rsquo;/g, '\u2019').replace(/"/g, '\u0022') : ''); // &rsquo; or ’
 }
 
 function humanText(text) {

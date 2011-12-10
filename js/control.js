@@ -812,7 +812,6 @@ function toBlankSlide() {
 // TODO: when adding a slide and pressing 'esc' to close the add slide dialog, the slideshow screen goes blank
 
 function setScreen(view) {
-  console.log(view);
   switch (view) {
     case 'announcements': case 'sermon':
       $("#launchButton").val("Worship");
@@ -870,7 +869,6 @@ function getUrl(view) {
   
 
 function activeView(view) {
-  console.log(view);
   $('#announcementPreview').css('display', 'none');
   $('#setList').css('display', 'none');
   $('#filesList').css('display', 'none');
@@ -1098,7 +1096,7 @@ function addSlide() {
       "text": $('#editText').val(),
       "localMods": true
     };
-    if (slideshow) {
+    if (slideshow && slideshow.location) {
       slideshow.location.reload(true);
     }
     setStoredSlides(storedSlides);
@@ -1179,9 +1177,6 @@ var formattingCommands =
 /* Here is a centralized TODO list
  * Adding a new slide, then putting it into the setlist, means that the slide AFTER the new one won't display.
 
-Slide preview
+In parser, spaces disappear before speech marks
 
-Fade between slides instead of jumping
-
-Extend setlist downwards to avoid scroll bars if possible.
  */
