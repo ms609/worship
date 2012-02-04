@@ -47,13 +47,13 @@ h2, .ccli {
   font-weight: bold;
 }
 
-.ccli {
-  right: 1em;
-  top: 1em;
-}
-
 .words {
   font-family: "Arial narrow";
+}
+
+.verse {
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
 }
 
 .subtitle {font-size:smaller;}
@@ -61,3 +61,23 @@ h2, .ccli {
 input {
   width:2.5em;
 }
+
+/* If chords aren't displayed, optimise for printing words */
+
+
+.no-chords .chords, .no-chords transpose {
+  display: none;
+}
+
+/* I'm leaving this section here in case Chrome ever supports columns properly
+.columns {
+  -webkit-columns: 48% 2;
+  -webkit-column-count: 2;
+  -moz-columns: 48% 2;
+  columns: 48% 2;
+}
+.no-chords .leftcol, .no-chords .rightcol {
+  float: none;
+  width: fill-available;
+}
+*/

@@ -9,7 +9,7 @@ Song content only available under terms of the CCLI.
 <html>
 
 <head>
-  <title>Print chord sheets | Newlife Church Toronto worship manager</title>
+  <title>Song printing | Worship manager</title>
   <!-- metadata -->
   <meta name="author" content="Martin Smith" />
   <meta name="company" content="Newlife Church Toronto" />
@@ -22,22 +22,22 @@ Song content only available under terms of the CCLI.
   <script src="js/print.js"></script>
 
   <!-- style sheet links -->
-  <link rel="stylesheet" href="ui/default/form.css" type="text/css" media="screen" id="editFields" />
-  <link rel="stylesheet" href="css/control.css" type="text/css" media="screen" />
-  <link rel="stylesheet" href="css/backend.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/control.css" type="text/css" media="screen,print">
+  <link rel="stylesheet" href="css/backend.css" type="text/css" media="screen,print" />
   <link rel="stylesheet" href="css/print.css" type="text/css" media="print,screen" />
   <link rel="stylesheet" href="css/print-page.css" type="text/css" media="print" />
 
 </head>
 
 <body>
-<header>
-  <a href="control.html" title="Control panel">Main page</a>
-  <a href="add.html">Add a song</a>
-  <a href="edit.html">Edit songs</a>
-  <h1>Newlife Church Toronto worship manager</h1>
-</header>
-  <p class="screenOnly"><input type="checkbox" checked id="showChords" /> <label for="showChords">Show chord lines?</label></p>
-<footer>
-</footer>
+  <header>
+    <a href="control.html" title="Control panel">Main page</a>
+    <a href="add.html">Add a song</a>
+    <a href="edit.html">Edit songs</a>
+  </header>
+  <div id="content">
+    <p class="screenOnly"><input type="checkbox" checked id="showChords" /> <label for="showChords">Show chord lines?</label></p>
+  </div>
+  <footer>
+  </footer>
 </body>

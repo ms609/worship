@@ -21,9 +21,8 @@ body {
 }
 
 .ccli {
-  position: absolute;
+  float: right;
   font-size:x-small;
-  top: -5px;
 }
 
 h2 {
@@ -31,14 +30,37 @@ h2 {
   border-top: solid 2px;
 }
 
+h1, h2 {
+  color: #111;
+}
+
 h1 {
   font-size: large;
+  page-break-after: avoid;
+  -webkit-column-break-after: avoid;
 }
 
 header, .screenOnly {
   display: none;
 }
 
-.newPage {
-  page-break-after: always;
+.page.no-chords {
+  page-break-inside: avoid;
+}
+
+.show-chords.page + .page {
+  page-break-before: always;
+}
+
+/* doesn't work in floated elements,
+     or if parent elements have overflow property set.
+                          
+when testing printing with css page-break be sure that any div container that the content is displayed in are set to 
+
+display:block !important;
+float:none !important;
+  */
+  
+.no-chords, .no-chords .words {
+  font-family: "Goudy Old Style", "Georgia", Times, 'Times New Roman', Serif;
 }
