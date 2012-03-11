@@ -4,7 +4,8 @@ if (!navigator.appVersion.match(/\bChrome\//)) {
   throw "Not using Chrome.";
 }
 
-  
+var server; // Will be populated on document.ready
+
 $(document).ready(function() {
   var showServerList = function (myList) {
     var text = '</ul><h4 listName="' + machineText(myList) + '">Server version of "' + humanText(myList)
@@ -20,8 +21,11 @@ $(document).ready(function() {
     url: serverURL + 'php/get_data.php',
     data: 'ccli=' + local.ccli,
     success: function(json) {
-      console.log(json);
-      var server = JSON.parse(json);
+      server = JSON.parse(json);
+      var tempLists = server.setLists;
+      server.setLists = JSON.parse(tempLists);
+      delete (tempLists);
+
       if (!server) {
         list.append("<h2>Error</h2><p>Could not retrieve data from server.  Is your church CCLI, #" + church.ccli + ", correct?</p>");
       } else {
@@ -29,20 +33,25 @@ $(document).ready(function() {
           var setLists = '';
           var newListsOnServer = 0;
           var localLists = JSON.parse(localStorage.getItem("setLists") || '{}');
+          console.log(server.setLists);
           for (var serverList in server.setLists) {
+            console.log(serverList);
+            console.log(localLists[serverList]);
             if (!localLists[serverList]) {
                 setLists += showServerList(serverList);
                 ++newListsOnServer;
             }
           }
-          setLists = '<h2 style="margin-top:3em;">Set list synchronization</h2>'
+          
+          console.log(setLists);
+          setLists = '<h2 style="margin-top: 2em;">Set list synchronization</h2>'
             + (newListsOnServer ? '<div><h3>' + newListsOnServer 
             + ' lists on server, but not this machine</h3><ul class="startCollapsed">' 
             + setLists + '</ul></div>' : '');
           for (var list in localLists) {
-            setLists += '<div><h3 value="' + machineText(list) + '">' + humanText(list)
-            + ' <a onclick="uploadList(this)">upload</a> <a onclick="toggleUl(this);">show</a></h3>'
-            + '<ul class="startCollapsed">';
+            setLists += '<details><summary value="' + machineText(list) + '">' + humanText(list)
+            + ' <a onclick="uploadList(this)">upload</a></summary>'
+            + '<ul>';
             for (var i in localLists[list]) {
               setLists += '<li>' + humanText(localLists[list][i]) + '</li>';
             }
@@ -50,7 +59,7 @@ $(document).ready(function() {
               setLists += showServerList(list);
             }
             setLists += '</ul>'
-            + '</div>';
+            + '</details>';
           }
           return setLists;
         });
@@ -290,26 +299,11 @@ function ifServerOnline(ifOnline, ifOffline) {
   img.src = serverURL + 'php/ping.png';
 }
 
-function toggleUl(item) {
-  var ul = $(item).parent().next("ul");
-  if (ul.height() == 0) {
-    ul.css('display', 'block');
-    ul.css('height', 'inherit');
-    var newHeight = ul.height();
-    ul.css('height', '0');
-    ul.animate({height:newHeight}, '300');
-    $(item).html("hide")
-  } else {
-    ul.animate({height:'0px'}, '300');
-    $(item).html("show")
-  }
-}
-
 function uploadList(item) {
   var upList = machineText($(item).parent().attr('value'));
   var localLists = JSON.parse(localStorage.getItem('setLists') || '{}');
-  serverLists[upList] = localLists[upList];
-  console.log(serverLists);
+  if (!server.setLists) server.setLists = {}; // Set format to array, not string
+  server.setLists[upList] = localLists[upList];
   commitServerLists(function(data) {
       $(item).html('uploaded');
       console.log(data);
@@ -320,8 +314,8 @@ function downloadList(item) {
   var downList = $(item).parent().attr('listName');
   var localLists = JSON.parse(localStorage.getItem('setLists') || '{}');
   console.log(localLists);
-  console.log(serverLists[machineText(downList)]);
-  localLists[machineText(downList)] = serverLists[machineText(downList)];
+  console.log(server.setLists[machineText(downList)]);
+  localLists[machineText(downList)] = server.setLists[machineText(downList)];
   console.log(localLists);
   localStorage.setItem('setLists', JSON.stringify(localLists));
   $(item).html('Downloaded');
@@ -332,7 +326,7 @@ function deleteList(item) {
   var sure = confirm('Are you sure you want to delete the set list "' + list
     + '"?  This cannot be undone!');
   if (sure) {
-    serverLists[list] = undefined;
+    server.setLists[list] = undefined;
     commitServerLists(function (data) {
       $(item).html('Deleted from server');
       console.log(data);
@@ -342,10 +336,12 @@ function deleteList(item) {
 
 function commitServerLists(callback) {
   $.ajax({
-    url: "http://www.geological-supplies.com/nlife/php/setlists.php",
-    //url: "../php/setlists.php",
+    url: serverURL + "php/upload_setlists.php",
     type: 'POST',
-    data: serverLists,
+    data: {
+      ccli: local.ccli,
+      setLists: server.setLists
+    },
     success: callback
   });
 }
