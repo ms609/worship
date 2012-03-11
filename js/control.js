@@ -26,10 +26,21 @@ if (!navigator.appVersion.match(/\bChrome\//)) {
 $(document).ready(function() {
   // Load user-specific settings
   if (!local.ccli) {
-    addCoverFrame('No CCLI', '<p>You need to specify your CCLI license number, so that we can\
-    access your song database.</p><p><label for=ccli>CCLI #:</label><input onchange="validateCCLI()"\
-      onkeyup="validateCCLI()" id=ccliInput name=ccli pattern="[0-9]+"></input></p>\
-    <div id=ccliResults class=noResults>No matching churches found.</div>');
+    addCoverFrame('Identify church', '<p>You need to specify the name of your \
+    church, so that we can access your song database.</p>\n\
+    <p><label for=churchName>Church name:</label>\
+    <input id=churchName name=churchName></input></p><p id=confirmChurch></p>');
+    $.ajax({
+      url: serverURL + 'php/list_churches.php',
+      success: function(list) {/*
+        var myList = {};
+        myList = list.split('\t');
+        console.log(myList);*/
+        $('#churchName').autocomplete({source: list.split('\t')});
+      }
+    }); 
+    $('#churchName').on('click change keyup mouseover', allowChurchSelection);
+    $('ul').on('click keyup keypress', allowChurchSelection);
   } else {
     personalize();
   }
@@ -41,7 +52,6 @@ $(document).ready(function() {
     populateLists(slideDatabase);
   }
   var currentSetList = localStorage.getItem('currentSetList') || "New";
-  //TODO: check that the speech marks are appropriate
   $('#selectSetList option[innerHTML="' + titleSetList(currentSetList) + '"]').attr('selected', 'selected');
   $('#selectSetList').change(function() {
     loadSetList($(this).val());
@@ -126,38 +136,42 @@ $(window).bind('beforeunload', function() {
   }
 });
 
-
-function validateCCLI() {
-  var noMatch = 'No matching churches found. ';
-  var addChurch = 'Add a church';
-  var ccli = $('#ccliInput').val();
-  if (ccli) { 
-    $.ajax({
-      url: serverURL + 'php/get_data.php',
-      data: 'ccli=' + ccli,
-      success: function(json) {
-        local = $.parseJSON(json);
-          $('#ccliResults').html(local
-          ? 'Matched <em>' + local.name + '</em> &#151; <a href="javascript:confirmCCLI()">Confirm</a>'
-          : noMatch + addChurch);
-      }
-    }); 
-  }
-  else $('#ccliResults').html(noMatch);
+function allowChurchSelection(event) {
+  setTimeout(function() {$.ajax({
+    url: serverURL + 'php/get_ccli.php',
+    data: {name: $('#churchName').val()},
+    success: function (data) {
+      if (data) {
+        $('#confirmChurch').html("CCLI#: <span id=CCLI>" + data + '</span> <input id=confirmButton\
+         onclick="confirmCCLI()" value="Confirm" type="button" />');
+      } else if ($('#churchName').val().length > 3) {
+        $('#confirmChurch').html('Add church? (not implemented)'); // TODO!
+      } else $('#confirmChurch').html('');
+    }
+  });}, 100);
 }
 
 function confirmCCLI() {
-  localStorage.setItem('ccli', local.ccli);
-  localStorage.setItem('churchName', local.name);
-  localStorage.setItem('background', local.background);
-  localStorage.setItem('worshipSlide', local.worship);
-  clearSetList();
-  $('#fullList option').remove(); 
-  slideDatabase = JSON.parse(local.songs);
-  populateLists(slideDatabase);
-  
-  personalize();
-  removeCoverFrame();
+$('#confirmButton').val('Confirming...');
+$.ajax({
+  url: serverURL + 'php/get_data.php',
+  data: {ccli: $('#CCLI').html()},
+  success: function (data) {
+    console.log(data);
+    local = JSON.parse(data);
+    console.log(local);
+    localStorage.setItem('ccli', local.ccli);
+    localStorage.setItem('churchName', local.name);
+    localStorage.setItem('background', local.background);
+    localStorage.setItem('worshipSlide', local.worship);
+    clearSetList();
+    $('#fullList option').remove(); 
+    slideDatabase = JSON.parse(local.songs);
+    populateLists(slideDatabase);
+
+    personalize();
+    removeCoverFrame();
+  }});
 }
 
 function personalize() {
@@ -364,10 +378,7 @@ function moveDownSetList(item) {
 }
 
 function populateSetListSelector() {
-  /****************************************/
-  /* Populate list of saved setlists                         */
-  /****************************************/
-
+  // Populate list of saved setlists
   var setListTitles = [];
   var setLists = JSON.parse(localStorage.getItem('setLists'));
   for (var list in setLists) {
@@ -392,12 +403,12 @@ function populateLists(JSONData) {
 
   // Items currently in our localStorage as a slide, i.e. in set list.  Start numbering at 0.
   // val is the song's name
-	while (val) {
+  while (val) {
     newSetListItem(val, i);
     setSongs[val] = true;
 		// Increment val to next song
     val = localStorage.getItem("slide" + ++i)
-	}
+  }
   localStorage.setItem("setListLength", i);
 
   var j = 0;
@@ -525,7 +536,7 @@ function startSlideshow(callback) {
 
 function backToWelcomeSlide() {
   localStorage.setItem("currentSlide", "-1"); // TODO use a global var instead of local Storage
-  if (slideshow) setScreen('welcome');
+  setScreen('welcome');
   updateHilite();
 }
 
@@ -764,7 +775,8 @@ function saveSetList(fromButton) {
   populateSetListSelector();
   return true;
 }
-// TODO.  If SETLIST A is loaded in control.html, then go to diff.html to download an updated version of SETLIST A, then the one that was in control.html will override the downloaded version.
+// TODO.  If SETLIST A is loaded in control.html, then go to diff.html to download an updated version of SETLIST A,
+//  then the one that was in control.html will override the downloaded version.
 function loadSetList(title) {
   //var oldList = localStorage.getItem('currentSetList');
   var listName = machineText(detitleSetList(title));
@@ -845,6 +857,7 @@ function setScreen(view) {
       onScreenNow = view;
       var targetUrl = getUrl(view);
       slideshow.location.href = targetUrl;
+      slideshow.focus();
       return true;
       }
   } else {
@@ -1000,7 +1013,8 @@ function editSettings() {
          <p><form><label for=name>Church name:</label><input name="name" id="newName" value="'
     + local.name + '" /><input type=button value="Update" onclick="updateName();">\
     <span id="nameStatus"></span></form></p>\
-         <iframe class="upload" src="' + serverURL + 'php/upload_background.php" />\
+         <iframe class="upload" src="' + serverURL + 'php/upload_background.php?ccli='
+          + local.ccli + '" />\
           <input type="button" value="Update" onclick="updateBackground();" />\
       <p><form enctype="multipart/form-data"><label for=welcome>Welcome slide:</label><input name="welcome"\
           id="welcomeImage" type="file"\
@@ -1126,10 +1140,23 @@ function doEdit() {
   original.position =  $('#originalTitle').attr('slidePos');
   var current = userSlide();
   if (original.title != current.title) {
-    localStorage.setItem('slide' + original.position, current.title);
+    localStorage.setItem('slide' + original.position, current.underscoreTitle);
     $('#setListSong' + original.position + ' .setListTitle').html(current.title);
+    $('#setListSong' + original.position).val(current.underscoreTitle);
     $('#originalTitle').html(current.title);
     delete slideDatabase[original.underscoreTitle];
+    // rename song where it appears in saved setlists
+    var setLists = JSON.parse(localStorage.getItem('setLists'));
+    console.log(setLists);
+    for (var list in setLists) {
+      for (var oSong in setLists[list]) {
+        if (setLists[list][oSong] == original.underscoreTitle) {
+          setLists[list][oSong] = current.underscoreTitle;
+        }
+      }
+    }
+    console.log(setLists);
+    localStorage.setItem('setLists', JSON.stringify(setLists));
   }
   slideDatabase[current.underscoreTitle] = {
     'author' : current.author,
