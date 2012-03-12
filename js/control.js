@@ -80,10 +80,12 @@ $(document).ready(function() {
   announcementFrame.css('display', 'none');
   announcementFrame.load(function() {
     var ap = document.getElementById('announcementPreview').contentWindow;
-    if (ap.document.getElementById('slideProj')) ap.document.getElementById('slideProj').disabled = false;
-    ap.toggle();
-    ap.fontSize('0.66em');
-    });
+    if (ap.document.getElementById('slideProj')) {
+      ap.document.getElementById('slideProj').disabled = false;
+      ap.toggle();
+      ap.fontSize('0.66em');
+    }
+  });
   $('#setList').after(announcementFrame);
   
   var filesFrame = $(document.createElement('iframe'));
