@@ -19,6 +19,7 @@ root {
 .white  {padding-left:3em;}
 .printonly {display:block;}
 
+.page {clear: both;}
 
 .leftcol, .rightcol {width: 48%; overflow: hidden;}
 .leftcol {float: left;}
@@ -36,11 +37,18 @@ h1 {
 }
 
 h2, .ccli {
+  line-height: 1em;
   font-size:x-small;
   font-weight: normal;
   text-align:right;
   width:100%;
   margin: 0;
+}
+
+.verse {
+  clear: both;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
 }
 
 .chords {
@@ -49,11 +57,6 @@ h2, .ccli {
 
 .words {
   font-family: "Arial narrow";
-}
-
-.verse {
-  page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 .subtitle {font-size:smaller;}

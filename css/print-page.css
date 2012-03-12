@@ -40,7 +40,7 @@ h1 {
   -webkit-column-break-after: avoid;
 }
 
-header, .screenOnly {
+header, .screenOnly, nav {
   display: none;
 }
 
