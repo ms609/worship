@@ -17,13 +17,11 @@ var slidePosition = {'sermon' : 0, 'announcements' : 0};
 var pathToAnnouncements = '../../announce/Announcements-ohp.html'; // Path to an announcements file using the S5 slideshow technique
 var filesDir = '/announce/images'; // Files (JPGs, vidoes) put in this directory can be displayed in the slideshow window with the "Files" button.
 
-if (!navigator.appVersion.match(/\bChrome\//)) {
-  alert("Please use Google Chrome to access the worship manager.");
-  document.body.innerHTML = "Please use Google Chrome to access the worship manager.";
-  throw "Not using Chrome.";
-}
-
 $(document).ready(function() {
+  if (!navigator.appVersion.match(/\bChrome\//)) {
+    alert("You should use Google Chrome to access the worship manager.");
+  }
+  
   // Load user-specific settings
   if (!local.ccli) {
     addCoverFrame('Identify church', '<p>You need to specify the name of your \
