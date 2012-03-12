@@ -1051,6 +1051,7 @@ function updateBackground () {
     data: 'ccli=' + local.ccli,
     success: function(json) {
       var server = $.parseJSON(json); 
+      console.log(server);
       local.background = server.background;
       localStorage.setItem('background', server.background);
       personalize();
