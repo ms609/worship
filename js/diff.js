@@ -33,17 +33,13 @@ $(document).ready(function() {
           var setLists = '';
           var newListsOnServer = 0;
           var localLists = JSON.parse(localStorage.getItem("setLists") || '{}');
-          console.log(server.setLists);
           for (var serverList in server.setLists) {
-            console.log(serverList);
-            console.log(localLists[serverList]);
             if (!localLists[serverList]) {
                 setLists += showServerList(serverList);
                 ++newListsOnServer;
             }
           }
           
-          console.log(setLists);
           setLists = '<h2 style="margin-top: 2em;">Set list synchronization</h2>'
             + (newListsOnServer ? '<div><h3>' + newListsOnServer 
             + ' lists on server, but not this machine</h3><ul class="startCollapsed">' 
@@ -235,7 +231,6 @@ function commitChanges() {
   if (serverModified) {
     $('#ajaxResult').html("Communicating with server; please don't close the window...");
     $('#commitButton').attr("disabled", "true");
-    console.log(toCommit);
     $.ajax({
       "url": "http://www.geological-supplies.com/nlife/php/put_songs.php",
       "data": toCommit,
@@ -306,17 +301,13 @@ function uploadList(item) {
   server.setLists[upList] = localLists[upList];
   commitServerLists(function(data) {
       $(item).html('uploaded');
-      console.log(data);
     });
 }
 
 function downloadList(item) {
   var downList = $(item).parent().attr('listName');
   var localLists = JSON.parse(localStorage.getItem('setLists') || '{}');
-  console.log(localLists);
-  console.log(server.setLists[machineText(downList)]);
   localLists[machineText(downList)] = server.setLists[machineText(downList)];
-  console.log(localLists);
   localStorage.setItem('setLists', JSON.stringify(localLists));
   $(item).html('Downloaded');
 }

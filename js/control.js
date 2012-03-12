@@ -80,7 +80,7 @@ $(document).ready(function() {
   announcementFrame.css('display', 'none');
   announcementFrame.load(function() {
     var ap = document.getElementById('announcementPreview').contentWindow;
-    ap.document.getElementById('slideProj').disabled = false;
+    if (ap.document.getElementById('slideProj')) ap.document.getElementById('slideProj').disabled = false;
     ap.toggle();
     ap.fontSize('0.66em');
     });
@@ -1202,8 +1202,9 @@ var formattingCommands =
 
 
 /* Here is a centralized TODO list
- * Adding a new slide, then putting it into the setlist, means that the slide AFTER the new one won't display.
-
-In parser, spaces disappear before speech marks
+ 
+* Deleting a slide is a little clumsy
+* 
+* In parser, spaces disappear before speech marks
 
  */
