@@ -159,9 +159,7 @@ $.ajax({
   url: serverURL + 'php/get_data.php',
   data: {ccli: $('#CCLI').html()},
   success: function (data) {
-    console.log(data);
     local = JSON.parse(data);
-    console.log(local);
     localStorage.setItem('ccli', local.ccli);
     localStorage.setItem('churchName', local.name);
     localStorage.setItem('background', local.background);
@@ -1047,13 +1045,11 @@ function updateName() {
 
 function updateBackground () {
   $.ajax({
-    url: serverURL + 'php/get_data.php',
-    data: 'ccli=' + local.ccli,
-    success: function(json) {
-      var server = $.parseJSON(json); 
-      console.log(server);
-      local.background = server.background;
-      localStorage.setItem('background', server.background);
+    url: serverURL + 'php/get_background.php',
+    data: {ccli: local.ccli},
+    success: function(data) {
+      localStorage.setItem('background', data);
+      local.background = data;
       personalize();
     }
   }); 
@@ -1150,7 +1146,6 @@ function doEdit() {
     delete slideDatabase[original.underscoreTitle];
     // rename song where it appears in saved setlists
     var setLists = JSON.parse(localStorage.getItem('setLists'));
-    console.log(setLists);
     for (var list in setLists) {
       for (var oSong in setLists[list]) {
         if (setLists[list][oSong] == original.underscoreTitle) {
@@ -1158,7 +1153,6 @@ function doEdit() {
         }
       }
     }
-    console.log(setLists);
     localStorage.setItem('setLists', JSON.stringify(setLists));
   }
   slideDatabase[current.underscoreTitle] = {
@@ -1207,7 +1201,7 @@ var formattingCommands =
 /* Here is a centralized TODO list
  
 * Deleting a slide is a little clumsy
-* 
+* The background doesn't update from the server
 * In parser, spaces disappear before speech marks
 
  */

@@ -3,8 +3,6 @@ function Slide (title, author, copyright, text, size) {
   // If missing data, load it
   if (typeof(author) == 'undefined') {
     var allSlides = JSON.parse(localStorage.getItem('slides'));
-    console.log(title);
-    console.log(allSlides[title]);
     author = allSlides[title]['author'];
     copyright = allSlides[title]['copyright'];
     text = allSlides[title]['text'];
