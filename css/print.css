@@ -49,6 +49,7 @@ h2, .ccli {
   clear: both;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
 }
 
 .chords {

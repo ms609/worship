@@ -38,6 +38,7 @@ h1 {
   font-size: large;
   page-break-after: avoid;
   -webkit-column-break-after: avoid;
+  -moz-column-break-after: avoid;
 }
 
 header, .screenOnly, nav {

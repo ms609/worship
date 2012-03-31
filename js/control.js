@@ -970,6 +970,7 @@ function addSong() {
 
 function editSong(container) {
   var song = new Slide(machineText(localStorage.getItem('slide' + $(container).attr('position'))));
+console.log(song);
   addCoverFrame('Edit slide: <span id="originalTitle" slidePos="'
     + $(container).attr('position') + '">' + humanText(song.title) + '</span>',
       '<div class=handout style="width: 800px;">\
@@ -990,7 +991,7 @@ function editSong(container) {
     <div class="handout" id="rubric" style="clear:both;">\
       <label for="author">Author: </label>\
       <input type="text" name="author" id="authorName" tabindex="3"\
-             onKeyUp="updateSlide(); value="' + song.author + '" />\
+             onKeyUp="updateSlide();" value="' + song.author + '" />\
       <label for="copyright">Copyright: &copy;</label>\
       <input type="text" id="copy" tabindex="4" value="' + song.copyright + '"\
                     name="copyright" onKeyUp="updateSlide();" />\
