@@ -38,6 +38,7 @@ function Slide (title, author, copyright, text, size) {
 
     for (var i in lines) {
       var line = lines[i];
+      line = line.replace(/^[\s\(]*(bridge|chorus|intro|outro|verse)[\s\):\d;\-]*$/ig, '#$1');
       var isChords = isChordLine(line);
       if (trim(line).length == 0 || trim(line).substring(0,3) == "---") { //--- represents a column break on slides only) {
         // If empty line, close paragraph
@@ -175,6 +176,7 @@ function parseSlide(text) {
 
   for (var i in lines) {
     var line = lines[i];
+    line = line.replace(/^[\s#\(]*(bridge|chorus|intro|outro|verse)[\s\):\d;\-]*$/ig, '#$1');
     if (!isChordLine(line)) {
       if (trim(line).length == 0) {
         // If empty line, close paragraph

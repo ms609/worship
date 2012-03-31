@@ -29,6 +29,7 @@ function updateSearch(fullText) { // TODO: [easy] search won't match inher_i_tan
   if (searchString) {
     // Full list of unused songs
     $(fullList.getElementsByTagName('option')).each( function (i) {
+      console.log(this);
       var text = searchify(humanText(this.value) + (fullText ? " " + slides[this.value]["text"] : ""));  
       if (text.match(searchRegExp)) {
         this.style.visibility = "visible";
