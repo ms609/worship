@@ -32,7 +32,10 @@ $(document).ready(function() {
         $('#differentLists').append(function () {
           var setLists = '';
           var newListsOnServer = 0;
-          var localLists = JSON.parse(localStorage.getItem("setLists") || '{}');
+          var localLists = JSON.parse(
+              (localStorage.getItem("setLists")=="null"
+                || localStorage.getItem("setLists")=="")?
+              '{}' : localStorage.getItem("setLists"));
           for (var serverList in server.setLists) {
             if (!localLists[serverList]) {
                 setLists += showServerList(serverList);
