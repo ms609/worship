@@ -946,7 +946,7 @@ function addSong() {
         </div>\
       <div style="float:left; width: 380px;">\
         <label for="title">Title: </label>\
-        <input type="text" class="title" name="title" id="songTitle" tabindex="1"\
+        <input type="text" required="required" class="title" name="title" id="songTitle" tabindex="1"\
           placeholder="Add new slide" onKeyUp="updateSlide();" />\
       <textarea name="text" id="editText" rows="17" tabindex="2"\
               onKeyUp="updateSlide();" style="width:100%;"></textarea>\
@@ -970,7 +970,6 @@ function addSong() {
 
 function editSong(container) {
   var song = new Slide(machineText(localStorage.getItem('slide' + $(container).attr('position'))));
-console.log(song);
   addCoverFrame('Edit slide: <span id="originalTitle" slidePos="'
     + $(container).attr('position') + '">' + humanText(song.title) + '</span>',
       '<div class=handout style="width: 800px;">\
@@ -1129,7 +1128,7 @@ function addSlide() {
     updateSearch(form.fullTextSearch.checked);
     activatePreviews();
   } else {
-    $('#additionMsg').html("<p>Slide not added - specify a title</p>");
+    $('#updateMsg').html("<p>Slide not added - specify a title</p>");
   }
 }
 
