@@ -124,17 +124,10 @@ $(window).focus(function() {
 });
 
 $(window).bind('beforeunload', function() {
-  var slidesClosed = slideshow 
-                    ? (confirm("Really close slide-show?")
-                      ? closeSlides(true)
-                      : false)
-                    : true;
-  if (slidesClosed) {
-    return null;
-  } else {
-    return "Stay on this page?!";
-  }
+  return "If you leave this page, the slideshow will close.";
 });
+
+$(window).bind('unload', function() {closeSlides(true)});
 
 function allowChurchSelection(event) {
   setTimeout(function() {$.ajax({
@@ -177,10 +170,15 @@ function personalize() {
   if (local.background) $('.slidecontent').css({'background-image': 'url(' + local.background + ')'});
 }
 
-function addToSetList() {
-  var selected = $.map($('#fullList :selected'), function(e) {return machineText($(e).text());});
+// Adds items that are highlighted to the set list
+function addSelectedToSetList() {
+  var selected = $.map($('#fullList :selected'), function(e) 
+    {return machineText($(e).text());});
   $('#fullList :selected').remove();
   $('#searchBox').val("");
+  
+  // The below is equivalent to addSongToSetList(), 
+  // made more efficient by avoiding multiple calls
   updateSearch();
   var i = localStorage.getItem('setListLength');
   for (var item in selected) {
@@ -192,6 +190,16 @@ function addToSetList() {
   activatePreviews();
 }
 
+function addSongToSetList(title) {
+  var i = localStorage.getItem('setListLength');
+  newSetListItem(title, i); // don't increment yet, because numbering started at 0
+  localStorage.setItem('slide' + i, title);
+  localStorage.setItem('setListLength', ++i);
+  updateHilite();
+  activatePreviews();
+}
+
+// Creates a new HTML element in the setlist, without changing local database
 function newSetListItem(item, i) {
   var add = $(document.createElement("div"));
   add.addClass("setListItem");
@@ -442,7 +450,7 @@ function addSearchResult() {
     if ($('#fullList option:selected').length == 0) {
       $(results[0]).attr('selected', 'selected');
     }
-    addToSetList();
+    addSelectedToSetList();
   }
   return false; // to stop form submission
 }
@@ -616,11 +624,11 @@ function previewSlide(title) {
 
 function activatePreviews () {
   $('.setListItem').not(':first').mouseover(function() {
-    previewSlide(machineText($(this).find('.setListTitle').html()));
+    previewSlide($(this).val());
   });
   
   $('#fullList option').mouseover(function() {
-    previewSlide(this.value);
+    previewSlide($(this).val());
   });
 }
 
@@ -731,7 +739,7 @@ function optionToSelected(caller) {
   if (!$("#closeButton").attr("disabled")) {
     showSlideCalled($(caller).val());
   } else {
-    addToSetList();
+    addSelectedToSetList();
   }
 }
 
@@ -1097,9 +1105,10 @@ function updateSlide() {
 }
 
 function addSlide() {
-  localStorage.setItem('slideCount', localStorage.getItem('slideCount') + 1);
   if ($('#songTitle').val() != "") {
-    var storedSlides = getStoredSlides(true); // TODO check whether we can replace with JSON.parse(localStorage.getItem("slides")); to dispence with localStorage.js
+    // Add to local slide database
+    localStorage.setItem('slideCount', localStorage.getItem('slideCount') + 1);
+    var storedSlides = getStoredSlides(true); // TODO check whether we can replace with JSON.parse(localStorage.getItem("slides")); to dispense with localStorage.js
     storedSlides[machineText($('#songTitle').val())] = {
       "size": $('#fontSize').val(),
       "author":  $('#authorName').val(),
@@ -1111,22 +1120,23 @@ function addSlide() {
       slideshow.location.reload(true);
     }
     setStoredSlides(storedSlides);
-    $('#setList').empty();
-    $('#fullList').empty();
-    populateLists(JSON.parse(localStorage.getItem("slides")));
+    
+    // Add to setlist
+    addSongToSetList(machineText($('#songTitle').val()));
+    updateSlide();
+    updateSearch(form.fullTextSearch.checked);
+    activatePreviews();
+    
     // Clear the Add Slide dialog
     $('input[type=text]').each( function () {
       $(this).val("");
     });
+    $('textarea').val("");
     $('#additionMsg').html("<span>Slide added successfully.<br />\
     <a href='edit.html'>Edit slides?</a>\n\
     <a href='diff.html'>Sync to server?</a>\n\
     <a href='javascript:removeCoverFrame()'>Close this window</a>\n\
 </span>");
-    $('textarea').val("");
-    updateSlide();
-    updateSearch(form.fullTextSearch.checked);
-    activatePreviews();
   } else {
     $('#updateMsg').html("<p>Slide not added - specify a title</p>");
   }
