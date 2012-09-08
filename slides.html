@@ -18,7 +18,8 @@
     function show(html) {
       document.getElementById('slide').innerHTML = html;
     }
-    document.title = 'Projected worship songs | ' + church.name;
+    if (local.background)
+    document.title = 'Projected worship songs | ' + (local.name ? local.name : "Initialization fault");
   </script>
   <!--script src="ui/default/slides.js" type="text/javascript" defer></script-->
 </head>
@@ -43,6 +44,5 @@
 
 <!-- end of presentation-->
 </div>
-
 </body>
 </html>

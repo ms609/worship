@@ -167,7 +167,8 @@ $.ajax({
 
 function personalize() {
   document.title = 'Worship Slide Control | ' + local.name;
-  if (local.background) $('.slidecontent').css({'background-image': 'url(' + local.background + ')'});
+  if (local.background) $('.slidecontent').css({'background-image': 'url(' + local.background + ')',
+    'background-size': '100% 100%'});
 }
 
 // Adds items that are highlighted to the set list
@@ -647,6 +648,7 @@ function showSlideCalled(title) {
       }
       if (slideshow.document.getElementById('slide')) {
         var screen = $(slideshow.document.getElementById('slide'));
+        $(slideshow.document.body).css({'background-image':'url(' + local.background + ')'});
         screen.html(slide.slideContent);
         if (screen.is(':hidden')) {
           screen.fadeIn(300);

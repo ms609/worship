@@ -15,8 +15,8 @@ html>body .slide {position: fixed;}
 
 /* Following are the presentation styles -- edit away! */
 
-body {background: #000 url('../ui/default/background.jpg') fixed right bottom no-repeat;
-      /*background-size:100%;*/
+body {background: #000 fixed right bottom no-repeat;
+      background-size:100%;
       color: #ede; font-size: 2em; font-family: verdana, arial, sans-serif}
 h1, h2, h3, h4 {font-size: 100%; margin: 0; padding: 0; font-weight: inherit;}
 html, body {margin: 0; padding: 0;}
