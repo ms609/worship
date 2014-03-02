@@ -6,10 +6,11 @@ require_once ("connect.php");
 header("Content-type: text/html; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
-if (!is_numeric($_POST['ccli'])) exit ('{"error": "Non-numeric CCLI #"}');
+/*if (!is_numeric($_POST['ccli'])) exit ('{"error": "Non-numeric CCLI #"}');*/
 require_once('connect.php');
-$ccli = $_POST['ccli'];
-unset ($_POST["ccli"]);
+/*$ccli = $_POST['ccli'];
+unset ($_POST["ccli"]);*/
+$ccli = 11038982;
 foreach ($_POST as $key => $value) {
   foreach ($value as $oKey => $oVal) {
     $myVal[$oKey] = stripslashes($oVal);
