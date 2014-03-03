@@ -2,7 +2,7 @@
 function Slide (title, author, copyright, text, size) {
   // If missing data, load it
   var allSlides = JSON.parse(localStorage.getItem('slides'));
-  if (allSlides && title && typeof(author) == 'undefined') {
+  if (allSlides && title && typeof(author) === 'undefined') {
     author = allSlides[title]['author'];
     copyright = allSlides[title]['copyright'];
     text = allSlides[title]['text'];
@@ -10,7 +10,7 @@ function Slide (title, author, copyright, text, size) {
   }
   
   this.title = title.replace(/^\s+|\s+$/g, "");
-
+  
   this.plainTitle = humanText(this.title);
 
   this.underscoreTitle = machineText(this.title);
@@ -23,7 +23,10 @@ function Slide (title, author, copyright, text, size) {
 
   this.credit = parseCredit(author, copyright);
 
-  this.text = text.replace(/\r/g, "");
+  if (typeof(text) !== 'undefined') this.text = text.replace(/\r/g, ""); else {
+    this.text="";
+    text = "";
+  }
 
   this.printDivs = (function () {
 

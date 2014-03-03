@@ -691,21 +691,15 @@ function hiliteItem(i) {
     switch(1 * oItem.attr("position")) {
       case i:
         oItem.css("background-color", "#abed51");
-        oItem.animate({
-          left: 5
-        });
+        oItem.animate({left: 5});
       break;
       case 1 * 1 + i:
-          oItem.css("background-color", "#bfbbbb");
-          oItem.animate({
-            left: 2
-          });
+        oItem.css("background-color", "#bfbbbb");
+        oItem.animate({left: 2});
       break;
       default:
         oItem.css("background-color", "#eee");
-        oItem.animate({
-          left: 0
-        });
+        oItem.animate({left: 0});
     }
   });
 }

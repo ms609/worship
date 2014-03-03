@@ -10,7 +10,7 @@ $(document).ready(function() {
   var showServerList = function (myList) {
     var text = '</ul><h4 listName="' + machineText(myList) + '">Server version of "' + humanText(myList)
       + '" <a onclick="downloadList(this)">download</a>'
-      + ' <a onclick="deleteList(this)">delete</a></h4><ul>'
+      + ' <a onclick="deleteList(this)">delete</a></h4><ul>';
     for (var i in server.setLists[myList]) {
         text += '<li>' + humanText(server.setLists[myList][i]) + '</li>';
       }
@@ -33,11 +33,11 @@ $(document).ready(function() {
           var setLists = '';
           var newListsOnServer = 0;
           var localLists = JSON.parse(
-              (localStorage.getItem("setLists")=="null"
-                || localStorage.getItem("setLists")=="")?
+              (localStorage.getItem("setLists")===null
+                || localStorage.getItem("setLists")==="")?
               '{}' : localStorage.getItem("setLists"));
           for (var serverList in server.setLists) {
-            if (localLists == null || !localLists[serverList]) {
+            if (localLists === null || !localLists[serverList]) {
                 setLists += showServerList(serverList);
                 ++newListsOnServer;
             }
@@ -65,7 +65,7 @@ $(document).ready(function() {
 
         // Setlists done; now do slides.  Last svn downloaded are saved as "local.songs"
         var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
-        var locallyEmpty = (locallyStored == '{}');
+        var locallyEmpty = (locallyStored === '{}');
         serverDatabase = server.songs ? JSON.parse(server.songs) : {};
         var forImmediateUpdate = locallyStored;
 
@@ -74,7 +74,7 @@ $(document).ready(function() {
           if (locallyStored[oSlide]) {} else {
             var newSlide = array2slide(oSlide, serverDatabase[oSlide]);
             list.append(choice(++i, oSlide, 'Extra slide on server', locallyEmpty));
-            addChange(i, "Slide", "(nothing)", slidePreview(newSlide));
+            addChange(i, "Slide", "(nothing)", slidePreview(newSlide), locallyEmpty);
           }
         }
 
@@ -94,19 +94,19 @@ $(document).ready(function() {
                                     serverDatabase[oSlide]["text"],
                                     serverDatabase[oSlide]["size"]);
             if (locallyStored[oSlide]['modified']) {
-              if (mySlide.text == serverSlide.text) {
+              if (mySlide.text === serverSlide.text) {
                 var modifications = $(document.createElement("div"));
                 modifications.append("<h2>Modified slide in local storage" + 
                   locallyStored[oSlide]['modified'] + ".</h2>");
                 var modified = false;
                 var props = Array("author", "copyright", "size");
                 for (var prop in props) {
-                  if (serverDatabase[oSlide][props[prop]] != locallyStored[oSlide][props[prop]]) {
+                  if (serverDatabase[oSlide][props[prop]] !== locallyStored[oSlide][props[prop]]) {
                     if (!modified) {
                       list.append(choice(++i, oSlide, "Properties modified in local storage"));
                       modified = true;
                     }
-                    addChange(i, props[prop], locallyStored[oSlide][props[prop]], serverDatabase[oSlide][props[prop]])
+                    addChange(i, props[prop], locallyStored[oSlide][props[prop]], serverDatabase[oSlide][props[prop]]);
                   }
                 }
               } else {
@@ -116,7 +116,7 @@ $(document).ready(function() {
               }
             } else {
               // Update from server without prompting
-              forImmediateUpdate[oSlide] = (serverDatabase[oSlide] || locallyStored[oSlide])
+              forImmediateUpdate[oSlide] = (serverDatabase[oSlide] || locallyStored[oSlide]);
               forImmediateUpdate[oSlide]['modified'] = false;
             }
           } else {
@@ -152,14 +152,15 @@ function choice(id, title, caption, addByDefault) {
   var row = $(document.createElement("div"));
   row.css("display", "table-row");
   row.addClass("shady");
-  row.append("<div class='changelabel' id='label" + id + "' onclick='choose(\"none\", " + id + ")'><h3>Attribute</h3></div>")
-  row.append("<div class='local changes' id='local" + id + "' onclick='choose(\"local\", " + id + ")'><h3>On this PC</h3></div>")
-  row.append("<div class='server changes' id='server" + id + "' onclick='choose(\"server\", " + id + ")'><h3>On server</h3></div>")
+  row.append("<div class='changelabel' id='label" + id + "' onclick='choose(\"none\", " + id + ")'><h3>Attribute</h3></div>");
+  row.append("<div class='local changes' id='local" + id + "' onclick='choose(\"local\", " + id + ")'><h3>On this PC</h3></div>");
+  row.append("<div class='server changes' id='server" + id + "' onclick='choose(\"server\", " + id + ")'><h3>On server</h3></div>");
   out.append(row);
   return out;
 }
 
-function addChange(i, label, pc, server) {
+function addChange(i, label, pc, server, chooseServer) {
+  if (chooseServer === 'null') chooseServer = false;
   var row = $(document.createElement("div"));
   var labelDiv = $(document.createElement("div"));
   var localDiv = $(document.createElement("div"));
@@ -177,7 +178,11 @@ function addChange(i, label, pc, server) {
   serverDiv.click(function() {choose("server", i);});
   localDiv.click(function() {choose("local", i);});
   labelDiv.click(function() {choose("none", i);});
-  labelDiv.css("background-color", "rgba(255,80,0,0.2)");
+  if (chooseServer) {
+    serverDiv.css('background-color', 'rgba(0, 255, 0, 0.3)');
+  } else {
+    labelDiv.css("background-color", "rgba(255,80,0,0.2)");
+  }
   labelDiv.append(label);
   localDiv.append(pc);
   serverDiv.append(server);
@@ -187,7 +192,7 @@ function addChange(i, label, pc, server) {
 
 function choose (choice, i) {
   $('[i="' + i +'"]').each(function(index) {
-    $(this).css("background-color", ($(this).attr("chosen") == choice ? "rgba(" + (choice == "none" ? "255,0" : "0,255") + ",0,0.3)" : "inherit"));
+    $(this).css("background-color", ($(this).attr("chosen") === choice ? "rgba(" + (choice === "none" ? "255,0" : "0,255") + ",0,0.3)" : "inherit"));
   });
   $('#choice' + i).attr("choice", choice);
 }
@@ -195,7 +200,7 @@ function choose (choice, i) {
 function commitChanges() {
   var toCommit = serverDatabase;
   var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
-  var forLocal = locallyStored;
+  var forLocal = (locallyStored === '{}' ? Array() : locallyStored);
   var addedSlides = '';
   var deletedSlides = '';
   var modifiedSlides = '';
@@ -206,7 +211,7 @@ function commitChanges() {
       case  "local":
         serverModified = true;
         if (locallyStored[oSlide]) {
-          if (typeof serverDatabase[oSlide] != "undefined") {
+          if (typeof serverDatabase[oSlide] !== "undefined") {
             modifiedSlides += oSlide + "; ";
           } else {
             addedSlides += oSlide + "; ";
@@ -229,6 +234,7 @@ function commitChanges() {
         break;
     }
   });
+  console.log(forLocal);
   setStoredSlides(forLocal);
   // Add svn_log_message last; this will both provide a log message for the svn commit,
   // and act as a "end of file" marker to confirm that the connection has not been interrupted.
@@ -258,7 +264,7 @@ function slidePreview(slide, id, cfSlide) {
   var lines = slide.text.split("\n");
   var cfLine = cfSlide ? cfSlide.text.split("\n") : lines;
   for (var i in lines) {
-    text += "<span class='newline" + (lines[i] == cfLine[i] ? "":  " differentline")
+    text += "<span class='newline" + (lines[i] === cfLine[i] ? "":  " differentline")
          + "'>" + lines[i].replace(/ /g, "&nbsp;") + "&nbsp;</span>";
 
   }
@@ -289,12 +295,12 @@ function ifServerOnline(ifOnline, ifOffline) {
   img.onload = function()
   {
     $(img).remove();
-    ifOnline && ifOnline.constructor == Function && ifOnline();
+    ifOnline && ifOnline.constructor === Function && ifOnline();
   };
   img.onerror = function()
   {
     $(img).remove();
-    ifOffline && ifOffline.constructor == Function && ifOffline();
+    ifOffline && ifOffline.constructor === Function && ifOffline();
   };
   img.src = serverURL + 'php/ping.png';
 }

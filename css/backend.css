@@ -77,6 +77,16 @@ body {
   font-family: Tahoma, Verdana, Arial, Helvetica, 'Bitstream Vera Sans', sans-serif;
 }
 
+#padded-content {
+  top: 0;
+  left: 0;
+  width: 90%;
+  display: table;
+  padding: 3%;
+  padding-top: 1em;
+  position: relative;
+}
+
 a:link, a:visited {
   color: #8D8A8A;
   text-decoration: none;
