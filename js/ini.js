@@ -8,8 +8,15 @@
 var serverURL = 'http://www.geological-supplies.com/nlife/';
 
 var local = {};
+/* 
 local.ccli = localStorage.getItem('ccli');
 local.name = localStorage.getItem('churchName') || 'Anonymous church';
+local.songs = localStorage.getItem('slides') || '{}';
+local.setLists = localStorage.getItem('setLists') || '{}';
+local.background = localStorage.getItem('background') || '{}';
+*/
+local.ccli  = '11038981';
+local.name  = 'Newlife Church Toronto';
 local.songs = localStorage.getItem('slides') || '{}';
 local.setLists = localStorage.getItem('setLists') || '{}';
 local.background = localStorage.getItem('background') || '{}';

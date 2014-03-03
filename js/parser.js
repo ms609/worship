@@ -1,8 +1,8 @@
 // TODO here: http://code.google.com/speed/articles/optimizing-javascript.html
 function Slide (title, author, copyright, text, size) {
   // If missing data, load it
-  if (typeof(author) == 'undefined') {
-    var allSlides = JSON.parse(localStorage.getItem('slides'));
+  var allSlides = JSON.parse(localStorage.getItem('slides'));
+  if (allSlides && title && typeof(author) == 'undefined') {
     author = allSlides[title]['author'];
     copyright = allSlides[title]['copyright'];
     text = allSlides[title]['text'];

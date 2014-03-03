@@ -37,7 +37,7 @@ $(document).ready(function() {
                 || localStorage.getItem("setLists")=="")?
               '{}' : localStorage.getItem("setLists"));
           for (var serverList in server.setLists) {
-            if (!localLists[serverList]) {
+            if (localLists == null || !localLists[serverList]) {
                 setLists += showServerList(serverList);
                 ++newListsOnServer;
             }
@@ -65,6 +65,7 @@ $(document).ready(function() {
 
         // Setlists done; now do slides.  Last svn downloaded are saved as "local.songs"
         var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
+        var locallyEmpty = (locallyStored == '{}');
         serverDatabase = server.songs ? JSON.parse(server.songs) : {};
         var forImmediateUpdate = locallyStored;
 
@@ -72,7 +73,7 @@ $(document).ready(function() {
         for (var oSlide in serverDatabase) {
           if (locallyStored[oSlide]) {} else {
             var newSlide = array2slide(oSlide, serverDatabase[oSlide]);
-            list.append(choice(++i, oSlide, 'Extra slide on server'));
+            list.append(choice(++i, oSlide, 'Extra slide on server', locallyEmpty));
             addChange(i, "Slide", "(nothing)", slidePreview(newSlide));
           }
         }
@@ -132,19 +133,20 @@ $(document).ready(function() {
              onclick="commitChanges();" />\
              <label for=commit id=ajaxResult>[Click to update the server]</label>'
         );
+        $('#bePatient').fadeOut();
       }
     },
     error: function () {
       // TODO automatic retry
       list.append("<h2>Error</h2><p>Could not connect to central server.  Check your connection to the internet</p>");
     }
-  }); 
+  });
 });
 
-function choice(id, title, caption) {
+function choice(id, title, caption, addByDefault) {
   var out = $(document.createElement("div"));
   out.attr("id", "choice" + id);
-  out.attr("choice", "none");
+  out.attr("choice", addByDefault ? "server" : "none");
   out.attr("slideTitle", title.replace(/\s/g, "_"));
   out.append("<h2>" + parseSlideTitle(title) + ": " + caption + "</h2>");
   var row = $(document.createElement("div"));
