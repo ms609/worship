@@ -538,18 +538,19 @@ function setListToStorage() {
 }
 
 function handleKeypress(e) {
+  if ($('#coverFrame').length > 0) return false;
   switch (e.target.id) {
     case 'searchBox': case 'addWordsBox': case 'selectSetList': return false; 
     default:
     switch (e.keyCode) {
-      case 39:
-        // right;
+      case 39: case 40:
+        advanceSlide();
         break;
-      case 37:
-        // left
+      case 37: case 38:
+        previousSlide();
         break;
     } 
-    console.log(e.target);
+    console.log(e.keyCode);
   }
 }
 
