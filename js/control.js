@@ -23,7 +23,7 @@ $(document).ready(function() {
   }
   
   // Load user-specific settings
-  if (!local.ccli) {
+  if (false && !local.ccli) {
     addCoverFrame('Identify church', '<p>You need to specify the name of your \
     church, so that we can access your song database.</p>\n\
     <p><label for=churchName>Church name:</label>\
@@ -104,7 +104,7 @@ $(document).ready(function() {
       linkLi[i].html(link.replace(/^.*\//, ''));
       linkLi[i].attr('link', link);
       linkLi[i].bind('click', function() {
-        onScreenNow = 'file'
+        onScreenNow = 'file';
         slideshow.location.href = $(this).attr('link');
       });
       $('#filesUl').append(linkLi[i]);
@@ -117,7 +117,7 @@ $(document).ready(function() {
 
 
 $(window).focus(function() {
-  if (slideshow && onScreenNow == 'songs' && localStorage.getItem('currentSlide') > -1) {
+  if (slideshow && onScreenNow === 'songs' && localStorage.getItem('currentSlide') > -1) {
     showSlideCalled(localStorage.getItem('slide'
       + localStorage.getItem('currentSlide')), true);
   }
@@ -127,7 +127,9 @@ $(window).bind('beforeunload', function() {
   return "If you leave this page, the slideshow will close.";
 });
 
-$(window).bind('unload', function() {closeSlides(true)});
+$(window).bind('unload', function() {closeSlides(true);});
+
+$(document).keyup(handleKeypress);
 
 function allowChurchSelection(event) {
   setTimeout(function() {$.ajax({
@@ -218,7 +220,7 @@ function newSetListItem(item, i) {
   add.bind('dragleave', function() {add.removeClass('over');});
   add.bind('dragover', function () {add.addClass('over'); return false;});
   add.bind('drop', function () {
-    if (dragSource != add) moveSetListItem(dragSource, add);
+    if (dragSource !== add) moveSetListItem(dragSource, add);
   });
   add.bind('dragend', function() {$('.setListItem').removeClass('over');});
   
@@ -256,8 +258,8 @@ function moveSetListItem(from, to) {
     var oldPos = from.attr('position');
     var newPos = to.attr('position');
     var currentSlide = localStorage.getItem('currentSlide');
-    if (currentSlide == oldPos) return (oldPos > newPos ? ++newPos : newPos);
-    if (currentSlide == newPos) return (oldPos > newPos ? currentSlide : --currentSlide);
+    if (currentSlide === oldPos) return (oldPos > newPos ? ++newPos : newPos);
+    if (currentSlide === newPos) return (oldPos > newPos ? currentSlide : --currentSlide);
     if (currentSlide > oldPos && currentSlide < newPos) return --currentSlide;
     if (currentSlide < oldPos && currentSlide > newPos) return ++currentSlide;
     return currentSlide; 
@@ -303,7 +305,7 @@ function removeSetListItem(item) {
   activatePreviews();
   var iPosition = -1;
   var oPosition = item.attr("position");
-  if (oPosition == localStorage.getItem('currentSlide')) {
+  if (oPosition === localStorage.getItem('currentSlide')) {
     localStorage.setItem('currentSlide', localStorage.getItem('currentSlide') - 1);
   } // TODO:  allow use of slides not in list
   $('.setListItem').each( function (index) {
@@ -350,9 +352,9 @@ function moveUpSetList(item) {
       theAbove.css("top", 0);
     });
     var currentSlide = localStorage.getItem('currentSlide');
-    if (oPosition == currentSlide) {
+    if (oPosition === currentSlide) {
       localStorage.setItem('currentSlide', --currentSlide);
-    } else if (oPosition == ++currentSlide) {
+    } else if (oPosition === ++currentSlide) {
       localStorage.setItem('currentSlide', currentSlide);
     }
     updateHilite();
@@ -375,9 +377,9 @@ function moveDownSetList(item) {
       theBelow.css("top", 0);
     });
     var currentSlide = localStorage.getItem('currentSlide');
-    if (oPosition == currentSlide) {
+    if (oPosition === currentSlide) {
       localStorage.setItem('currentSlide', ++currentSlide);
-    } else if (oPosition == --currentSlide) {
+    } else if (oPosition === --currentSlide) {
       localStorage.setItem('currentSlide', currentSlide);
     }
     updateHilite();
@@ -406,26 +408,31 @@ function populateLists(JSONData) {
   var val = localStorage.getItem('slide' + i);
   populateSetListSelector();
   
+  var j = 0;
+  var k = 1;
+  JSONData = sortArray(JSONData);
+  for (var title in JSONData) {
+    if (title) allSongTitles[++j] = machineText(title);
+  }
+  
   // Populate the current set list //
 
   // Items currently in our localStorage as a slide, i.e. in set list.  Start numbering at 0.
   // val is the song's name
   while (val) {
-    newSetListItem(val, i);
-    setSongs[val] = true;
-		// Increment val to next song
-    val = localStorage.getItem("slide" + ++i)
+    if (allSongTitles.indexOf(val) > -1) {
+      newSetListItem(val, i);
+      setSongs[val] = true;
+    }
+    // Increment val to next song
+    val = localStorage.getItem("slide" + ++i);
   }
   localStorage.setItem("setListLength", i);
 
-  var j = 0;
-  var k = 1;
-  JSONData = sortArray(JSONData);
   var fragment = document.createDocumentFragment();
-  for (var title in JSONData) {
-    if (title) {
-      allSongTitles[++j] = machineText(title);
-    }
+  
+  for (var song in allSongTitles) {
+    title = allSongTitles[song];
     if (title.length > 0 && !setSongs[title]) {
       options[k] = document.createElement("option");
       options[k].value = title;
@@ -447,8 +454,8 @@ function populateLists(JSONData) {
 
 function addSearchResult() {
   var results = $('#fullList option');
-  if ($('#searchBox').val() && $(results[0]).css('visibility') == 'visible') {
-    if ($('#fullList option:selected').length == 0) {
+  if ($('#searchBox').val() && $(results[0]).css('visibility') === 'visible') {
+    if ($('#fullList option:selected').length === 0) {
       $(results[0]).attr('selected', 'selected');
     }
     addSelectedToSetList();
@@ -457,7 +464,7 @@ function addSearchResult() {
 }
 
 function addFullListItem(song) {
-  if ($('#fullList option[value="' + machineText(song) + '"]').length == 0) {
+  if ($('#fullList option[value="' + machineText(song) + '"]').length === 0) {
     var listItem = $(document.createElement("option"));
     listItem.val(machineText(song));
     listItem.html(humanText(song));
@@ -530,6 +537,22 @@ function setListToStorage() {
 	localStorage.setItem('setListLength', setListLength);
 }
 
+function handleKeypress(e) {
+  switch (e.target.id) {
+    case 'searchBox': case 'addWordsBox': case 'selectSetList': return false; 
+    default:
+    switch (e.keyCode) {
+      case 39:
+        // right;
+        break;
+      case 37:
+        // left
+        break;
+    } 
+    console.log(e.target);
+  }
+}
+
 function startSlideshow(callback) {
   slideshow = window.open(getUrl(onScreenNow || 'welcome'), "SlideShowWindow", "resizable=1,width=400,height=300,location=0");
   slideshow.moveTo(1138,0);
@@ -593,7 +616,7 @@ function advanceAnnouncements() {
     slideshow.go(1);
   } else {
     slideshow.subgo(1);
-    document.getElementById('announcementPreview').src = document.getElementById('announcementPreview').src.replace(/slide\d+/, 'slide' + slideshow.snum)
+    document.getElementById('announcementPreview').src = document.getElementById('announcementPreview').src.replace(/slide\d+/, 'slide' + slideshow.snum);
   }
   slidePosition[onScreenNow] = slideshow.snum;
 }
@@ -619,7 +642,7 @@ function itemToScreen(itemNumber) {
 }
 
 function previewSlide(title) {
-  var slide = new Slide (title);
+  var slide = new Slide(title);
   $('#preview').html(slide.parsedSlide);
 }
 
@@ -634,7 +657,7 @@ function activatePreviews () {
 }
 
 function showSlideNumbered (i) {
-  if (localStorage.getItem('slide' + i) != "") {
+  if (localStorage.getItem('slide' + i) !== "") {
     showSlideCalled(localStorage.getItem('slide' + i));
   }
 }
@@ -643,7 +666,7 @@ function showSlideCalled(title) {
   if (title) {
     var slide = new Slide(machineText(title));
     if (screenOpen()) {
-      if (onScreenNow != 'songs') {
+      if (onScreenNow !== 'songs') {
         setScreen('songs');
       }
       if (slideshow.document.getElementById('slide')) {
@@ -666,7 +689,7 @@ function showSlideCalled(title) {
 }
 
 function updateBlankSlide() {
-  if (slideshow && onScreenNow == 'blankSlide') {
+  if (slideshow && onScreenNow === 'blankSlide') {
     var slide = $(slideshow.document.getElementById('slide'));
     slide.html(parseDivs(parseSlide($('#addWordsBox').val())));
   }
@@ -758,9 +781,9 @@ function saveSetList(fromButton) {
   var oldName = detitleSetList($("#selectSetList option:selected").html());
   var newName = oldName;
   if (fromButton) {
-    newName = prompt("Name this setlist?", (oldName == "New")?"":oldName);
+    newName = prompt("Name this setlist?", (oldName === "New")?"":oldName);
   }
-  while (newName == "") {
+  while (newName === "") {
     newName = prompt("You need to provide a name:", "Unnamed ");
   }
   if (!newName) return false;
@@ -770,7 +793,7 @@ function saveSetList(fromButton) {
   var setLists = JSON.parse(localStorage.getItem('setLists')) || {};
   localStorage.removeItem(oldName);
   var contents = setListContents();
-  setLists[newName] = (contents[0] || newName == "New") ? contents : undefined;
+  setLists[newName] = (contents[0] || newName === "New") ? contents : undefined;
   $("#selectSetList option").remove();
   localStorage.setItem('currentSetList', newName);
   localStorage.setItem('setLists', JSON.stringify(setLists));
@@ -787,7 +810,7 @@ function loadSetList(title) {
   clearSetList();
   for (var song in newList) {
     newSetListItem(newList[song], song);    
-    localStorage.setItem("slide" + song, newList[song])
+    localStorage.setItem("slide" + song, newList[song]);
   }
   var fullList = document.getElementById('fullList');
   var replaceFullList = removeToInsertLater(fullList);
@@ -815,7 +838,7 @@ function toSermon() {
 }
 
 function toBlankSlide() {
-  if (onScreenNow == 'songs') {
+  if (onScreenNow === 'songs') {
     $(slideshow.document.getElementById('slide')).fadeOut(1400, function() {
       setScreen('blankSlide');
     });
@@ -834,7 +857,7 @@ function setScreen(view) {
       setTimeout("document.getElementById('announcementPreview').contentWindow.deAbsolutify()", 300);
     break;
     case 'songs':
-      if (onScreenNow != 'songs') {
+      if (onScreenNow !== 'songs') {
         if (localStorage.getItem('currentSlide') > -1) {
           setTimeout('showSlideNumbered(localStorage.getItem("currentSlide"), "setscreen")', 200);
         } else {
@@ -853,7 +876,7 @@ function setScreen(view) {
     break;
   }
   if (screenOpen()) {
-    if (typeof(onScreenNow) != 'undefined' && view == onScreenNow) {
+    if (typeof(onScreenNow) !== 'undefined' && view === onScreenNow) {
       return false;
     } else {
       onScreenNow = view;
@@ -914,7 +937,7 @@ function searchKeyPress (e) {
       break;
     case 38: // up arrow
     // up key
-    if (nowSelected.length == 0) {
+    if (nowSelected.length === 0) {
       $('#fullList option').last().attr('selected', true);
     } else {
       nowSelected.prev().attr('selected', true);
@@ -924,7 +947,7 @@ function searchKeyPress (e) {
     }
     break;
     case 40: // down arrow
-    if (nowSelected.length == 0) {
+    if (nowSelected.length === 0) {
       $('#fullList option').first().attr('selected', true);
     } else {
       nowSelected.next().attr('selected', true);
@@ -1059,7 +1082,7 @@ function updateBackground () {
 
 function addCoverFrame(title, content) {
   $(document).keyup(function(e) {
-      if (event.keyCode == 27) {
+      if (event.keyCode === 27) {
         removeCoverFrame();
         $(document).unbind('keyup');
       }
@@ -1101,7 +1124,7 @@ function updateSlide() {
 }
 
 function addSlide() {
-  if ($('#songTitle').val() != "") {
+  if ($('#songTitle').val() !== "") {
     // Add to local slide database
     localStorage.setItem('slideCount', localStorage.getItem('slideCount') + 1);
     var storedSlides = getStoredSlides(true); // TODO check whether we can replace with JSON.parse(localStorage.getItem("slides")); to dispense with localStorage.js
@@ -1142,7 +1165,7 @@ function doEdit() {
   var original = new Slide (machineText($('#originalTitle').html()));
   original.position =  $('#originalTitle').attr('slidePos');
   var current = userSlide();
-  if (original.title != current.title) {
+  if (original.title !== current.title) {
     localStorage.setItem('slide' + original.position, current.underscoreTitle);
     $('#setListSong' + original.position + ' .setListTitle').html(current.title);
     $('#setListSong' + original.position).val(current.underscoreTitle);
@@ -1152,7 +1175,7 @@ function doEdit() {
     var setLists = JSON.parse(localStorage.getItem('setLists'));
     for (var list in setLists) {
       for (var oSong in setLists[list]) {
-        if (setLists[list][oSong] == original.underscoreTitle) {
+        if (setLists[list][oSong] === original.underscoreTitle) {
           setLists[list][oSong] = current.underscoreTitle;
         }
       }
@@ -1165,9 +1188,9 @@ function doEdit() {
     'modified' : true,
     'size' : current.size,
     'text' : current.text
-  }
+  };
   localStorage.setItem('slides', JSON.stringify(slideDatabase));
-  if (original.position == localStorage.getItem('currentSlide')) {
+  if (original.position === localStorage.getItem('currentSlide')) {
     showSlideCalled(current.underscoreTitle);
   }
   activatePreviews();
@@ -1199,7 +1222,7 @@ var formattingCommands =
         lines (in the print out) to run into one line (on screen).</li>\
         <li>* echo *<br />\
             Asterisks surround echoes (e.g. where women sing a different lyric).</li>\
-      </ul>'
+      </ul>';
 
 
 /* Here is a centralized TODO list

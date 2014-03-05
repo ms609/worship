@@ -65,7 +65,7 @@ $(document).ready(function() {
 
         // Setlists done; now do slides.  Last svn downloaded are saved as "local.songs"
         var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
-        var locallyEmpty = (locallyStored === '{}');
+        var locallyEmpty = (locallyStored.length === 0 || local.songs === '{}');
         serverDatabase = server.songs ? JSON.parse(server.songs) : {};
         var forImmediateUpdate = locallyStored;
 
@@ -178,16 +178,16 @@ function addChange(i, label, pc, server, chooseServer) {
   serverDiv.click(function() {choose("server", i);});
   localDiv.click(function() {choose("local", i);});
   labelDiv.click(function() {choose("none", i);});
-  if (chooseServer) {
-    serverDiv.css('background-color', 'rgba(0, 255, 0, 0.3)');
-  } else {
-    labelDiv.css("background-color", "rgba(255,80,0,0.2)");
-  }
   labelDiv.append(label);
   localDiv.append(pc);
   serverDiv.append(server);
   row.append(labelDiv); row.append(localDiv); row.append(serverDiv);
   $('#choice' + i).append(row);
+  if (chooseServer) {
+    choose('server', i);
+  } else {
+    choose('none', i);
+  }
 }
 
 function choose (choice, i) {
@@ -234,7 +234,6 @@ function commitChanges() {
         break;
     }
   });
-  console.log(forLocal);
   setStoredSlides(forLocal);
   // Add svn_log_message last; this will both provide a log message for the svn commit,
   // and act as a "end of file" marker to confirm that the connection has not been interrupted.

@@ -2,7 +2,7 @@
 function Slide (title, author, copyright, text, size) {
   // If missing data, load it
   var allSlides = JSON.parse(localStorage.getItem('slides'));
-  if (allSlides && title && typeof(author) === 'undefined') {
+  if (allSlides && allSlides[title] && typeof(author) === 'undefined') {
     author = allSlides[title]['author'];
     copyright = allSlides[title]['copyright'];
     text = allSlides[title]['text'];
@@ -299,9 +299,9 @@ function countSpaces(text) {
 }
 
 function machineText(text) {
-  return (text ? text.replace(/\s/g, "_").replace(/'|&rsquo;/g, '\u2019').replace(/"/g, '\u0022') : ''); // &rsquo; or ’
+  return (typeof(text) === 'string' ? text.replace(/\s/g, "_").replace(/'|&rsquo;/g, '\u2019').replace(/"/g, '\u0022') : ''); // &rsquo; or ’
 }
 
 function humanText(text) {
-  return (text ? text.replace(/_/g, " ").replace(/'|&rsquo;/g, '\u2019') : ''); // &rsquo; or ’
+  return (typeof(text) === 'string' ? text.replace(/_/g, " ").replace(/'|&rsquo;/g, '\u2019') : ''); // &rsquo; or ’
 }

@@ -22,14 +22,14 @@ function updateSearch(fullText) { // TODO: [easy] search won't match inher_i_tan
   var searchRegExp = new RegExp("\\b" + (searchString + '').replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\-]', 'g'), '\\$&'));
   var fullList = document.getElementById('fullList');
   var replaceFullList = removeToInsertLater(fullList);
-  if (!searchString || !(searchString.substring(0, -1) == priorSearch || searchString == priorSearch)) {
+  if (!searchString || !(searchString.substring(0, -1) === priorSearch || searchString === priorSearch)) {
     fullList = sortFullList(fullList);
   }
   
   if (searchString) {
     // Full list of unused songs
     $(fullList.getElementsByTagName('option')).each( function (i) {
-      console.log(this);
+      if (!slides[this.value] || typeof(slides[this.value]) === 'undefined') return true;
       var text = searchify(humanText(this.value) + (fullText ? " " + slides[this.value]["text"] : ""));  
       if (text.match(searchRegExp)) {
         this.style.visibility = "visible";
@@ -41,11 +41,12 @@ function updateSearch(fullText) { // TODO: [easy] search won't match inher_i_tan
         fullList.appendChild(this);
       }
     });
-    $('#searchBox').css('backgroundColor', matchCount == 0 ? "#BFBBBB" : (matchCount == 1 ? "#88BC3F" : "inherit")); 
+    $('#searchBox').css('backgroundColor', matchCount === 0 ? "#BFBBBB" : (matchCount === 1 ? "#88BC3F" : "inherit")); 
     // Setlist
     $('#setList .setListTitle').each(function (i) {
       if (i > 0) {
         var slideTitle = localStorage.getItem('slide' + (i-1));
+        if (!slides || !slides[slideTitle]) return true;
         var text = searchify(slideTitle + (fullText ? " " + slides[slideTitle]["text"] : ""));  
         this.style.backgroundColor = text.match(searchRegExp) ? "coral" : "";      
       }
@@ -72,6 +73,7 @@ function updateSearch(fullText) { // TODO: [easy] search won't match inher_i_tan
  * @return {Function} A function that inserts the element into its original position
  **/
 function removeToInsertLater(element) {
+  if (!element || typeof(element) === 'undefined') return false;
   var parentNode = element.parentNode;
   var nextSibling = element.nextSibling;
   parentNode.removeChild(element);
@@ -83,3 +85,4 @@ function removeToInsertLater(element) {
     }
   };
 }
+
