@@ -5,7 +5,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 echo 11038982;
 /*
 require_once('connect.php');
-$sql = 'SELECT ccli FROM users WHERE name = \'' . $mysqli->real_escape_string($_REQUEST['name']) . '\';';
+$sql = 'SELECT ccli FROM users WHERE name = \'' . $mysqli->real_escape_string('Newlife Church Toronto') . '\';';
 $result = $mysqli->query($sql);
 if ($result) {
   $return = $result->fetch_assoc();

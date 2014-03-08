@@ -1,15 +1,11 @@
 <?
 header("Content-type: text/html; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
-require_once ("connect.php");
-
-header("Content-type: text/html; charset=utf-8");
-header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
-if (!is_numeric($_POST['ccli'])) exit ('{"error": "Non-numeric CCLI #"}');
-require_once('connect.php');
 $ccli = $_POST['ccli'];
 unset ($_POST["ccli"]);
+if (!is_numeric($ccli)) exit ('{"error": "Non-numeric CCLI #' . htmlspecialchars($ccli).'"}');
+require_once('connect.php');
 foreach ($_POST as $key => $value) {
   foreach ($value as $oKey => $oVal) {
     $myVal[$oKey] = stripslashes($oVal);
@@ -19,7 +15,7 @@ foreach ($_POST as $key => $value) {
 $new_database = str_replace(array("\\n", "\\r\\r\\n"), "\\r\\n", json_encode($new));
 if (strlen(trim($new_database)) > 15) {  
   $sql = 'UPDATE users SET lastModified=\''
-  . $mysqli->real_escape_string(time()) . '\', songs=\''
+  . $mysqli->real_escape_string(date('Y-m-d H:i:s')) . '\', songs=\''
   . $mysqli->real_escape_string($new_database)
   . '\' WHERE ccli = \'' . $ccli . '\';';
   $result = $mysqli->query($sql);
