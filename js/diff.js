@@ -208,7 +208,7 @@ function commitChanges() {
   $("[i]").each(function (i) {
     var oSlide = $('#choice' + i).attr("slideTitle"); // This contains underscores
     switch ($('#choice' + i).attr("choice")) {
-      case  "local":
+      case "local":
         serverModified = true;
         if (locallyStored[oSlide]) {
           if (typeof serverDatabase[oSlide] !== "undefined") {
@@ -217,6 +217,7 @@ function commitChanges() {
             addedSlides += oSlide + "; ";
           }
           toCommit[oSlide] = (locallyStored[oSlide] || null);
+          console.log(toCommit[oSlide]);
         } else {
           deletedSlides += oSlide + "; ";
           delete toCommit[oSlide];
