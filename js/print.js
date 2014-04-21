@@ -128,7 +128,22 @@ function fitContents(pageNumber, song) {
 }
 
 function toSharps (text) {
-  return text.replace(/Bb/g, "A#").replace(/Db/g, "C#").replace(/Eb/g, "D#").replace(/Gb/g, "F#").replace(/Ab/g, "G#");
+  return text.replace(/Bb/g, "A#").replace(/Db/g, "C#").replace(/Eb/g, "D#").replace(/Gb/g, "F#").replace(/Ab/g, "G#")
+    .replace(/VII/, 'B')
+    .replace(/VI/, 'A')
+    .replace(/IV/, 'F')
+    .replace(/V/, 'G')
+    .replace(/III/, 'E')
+    .replace(/II/, 'D')
+    .replace(/I/, 'C')
+    .replace(/vii/, 'Bm')
+    .replace(/vi/, 'Am')
+    .replace(/iv/, 'Fm')
+    .replace(/v/, 'Gm')
+    .replace(/iii/, 'Em')
+    .replace(/ii/, 'Dm')
+    .replace(/i/, 'Cm')
+  ;
 }
 
 function toKeyOf(text, target) {
@@ -181,18 +196,56 @@ function toKeyOf(text, target) {
  }
 }
 
+function toRoman(text) {
+  return text
+             .replace(/di[mM]/g,  "\u00b0")
+             .replace(/Ab[mM]/g, "\u266Dvi")
+             .replace(/A[mM]/g,  "vi")
+             .replace(/Bb[mM]/g, "\u266Dvii")
+             .replace(/B[mM]/g,  "vii")
+             .replace(/C[mM]/g,  "i")
+             .replace(/Db[mM]/g, "\u266Dii")
+             .replace(/D[mM]/g,  "ii")
+             .replace(/Eb[mM]/g, "\u266Diii")
+             .replace(/E[mM]/g,  "iii")
+             .replace(/F[mM]/g,  "iv")
+             .replace(/Gb[mM]/g, "\u266Dv")
+             .replace(/G[mM]/g,  "v")
+             .replace(/Ab/g,  "\u266DVI")
+             .replace(/A/g,   "VI")
+             .replace(/Bb/g,  "\u266DVII")
+             .replace(/B/g,   "VII")
+             .replace(/C/g,   "I")
+             .replace(/Db/g,  "\u266DII")
+             .replace(/D/g,   "II")
+             .replace(/Eb/g,  "\u266DIII")
+             .replace(/E/g,   "III")
+             .replace(/F/g,   "IV")
+             .replace(/Gb/g,  "\u266DV")
+             .replace(/G/g,   "V")
+             .replace(/(\d)(?!<)/g,   "<sup>$1</sup>")
+             .replace(/([iv])\s(\s*)/gi, "$1\u00b7$2")
+}
+
 function transpose(i, target, songTitle) {
+  var romanNotation = false;
   localStorage.setItem('key_' + songTitle, target);
   target = target.substr(0, 1).toUpperCase() + target.substr(1);
+  if (target === 'I') {
+    target = 'C';
+    romanNotation = true;
+  }
   var original;
   var shift;
   var originalPos; var targetPos;
   var order = new Array('A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#');
-  var replace = /replace-([A-G][b\#]?)-replace/;
+  var replace = /replace-([A-GIViv]+[b\#]?)-replace/;
   $("#slideText" + i + " .chords").each(function (index) {
-    var line = unrenderChords(this.innerHTML).replace(/\b([A-G][b\#]?)/g, "replace-$1-replace");
+    var line = unrenderChords(this.innerHTML).replace(/\b([A-GIViv]+[b\#]?)/g, "replace-$1-replace");
     if (!original) {
+      console.log(line)
       original = replace.exec(line);
+      console.log(original);
       original = original[1];
       var originalSharped = toSharps(original);
       var targetSharped = toSharps(target);
@@ -229,6 +282,7 @@ function transpose(i, target, songTitle) {
       line = line.replace("replace-" + old + "-replace", order[1*oldPosition + shift]);
     }
     line = toKeyOf(line, target);
+    if (romanNotation) line = toRoman(line);
     $(this).html(renderChords(line));
     return true;
   });
