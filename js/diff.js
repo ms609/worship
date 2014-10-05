@@ -243,7 +243,7 @@ function commitChanges() {
     $('#ajaxResult').html("Communicating with server; please don't close the window...");
     $('#commitButton').attr("disabled", "true");
     $.ajax({
-      "url": "http://www.geological-supplies.com/nlife/php/put_songs.php",
+      "url": serverURL + "php/put_songs.php",
       "data": toCommit,
       "type": "POST",
       "success": function (data) {

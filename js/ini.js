@@ -5,7 +5,7 @@
  * Song content only available under terms of the CCLI.
  */
 
-var serverURL = 'http://www.geological-supplies.com/nlife/';
+var serverURL = 'http://www.rachelhelensmith.com/nlife/';
 
 var local = {};
 /* 
