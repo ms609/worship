@@ -4,8 +4,10 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_POST) {
-  $setlists = $_POST['setLists'];
+  $setlists = json_decode($_POST['setLists']);
   $ccli = $_POST['ccli'];
+} else {
+  exit ("upload_setlists: Empty _POST data");
 }
 foreach ($setlists as $key => $value) {
   $myVal = null;
@@ -17,7 +19,6 @@ foreach ($setlists as $key => $value) {
 $new_database = str_replace(array("\\n", "\\r\\r\\n"), "\\r\\n", json_encode($new));
 if (strlen(trim($new_database)) > 15) {
   require_once('connect.php');
-  exit (put_data($ccli, 'setLists', $new_database));
   $message = put_data($ccli, 'setLists', $new_database)
           ? "Thanks; your changes have been saved to the central database and can be accessed from other machines."
           : "There was a problem saving the changes.";

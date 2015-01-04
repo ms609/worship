@@ -316,6 +316,7 @@ function uploadList(item) {
   if (!server.setLists) server.setLists = {}; // Set format to array, not string
   server.setLists[upList] = localLists[upList];
   commitServerLists(function(data) {
+      console.log(data);
       $(item).html('uploaded');
     });
 }
@@ -348,7 +349,7 @@ function commitServerLists(callback) {
     traditional: true,
     data: {
       ccli: local.ccli,
-      setLists: server.setLists
+      setLists: JSON.stringify(server.setLists)
     },
     success: callback
   });
