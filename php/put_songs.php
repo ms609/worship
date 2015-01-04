@@ -3,10 +3,10 @@ header("Content-type: text/html; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 $ccli = $_POST['ccli'];
-unset ($_POST["ccli"]);
-if (!is_numeric($ccli)) exit ('{"error": "Non-numeric CCLI #' . htmlspecialchars($ccli).'"}');
+if (!is_numeric($ccli)) exit ('{"put_songs PHP error": "Non-numeric CCLI #' . htmlspecialchars($ccli).'"}');
+$json = json_decode($_POST['json']);
 require_once('connect.php');
-foreach ($_POST as $key => $value) {
+foreach ($json as $key => $value) {
   foreach ($value as $oKey => $oVal) {
     $myVal[$oKey] = stripslashes($oVal);
   }

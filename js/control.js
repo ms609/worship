@@ -22,27 +22,8 @@ $(document).ready(function() {
     alert("You should use Google Chrome to access the worship manager.");
   }
   
-  // Load user-specific settings
-  if (false && !local.ccli) {
-    addCoverFrame('Identify church', '<p>You need to specify the name of your \
-    church, so that we can access your song database.</p>\n\
-    <p><label for=churchName>Church name:</label>\
-    <input id=churchName name=churchName></input></p><p id=confirmChurch></p>');
-    $.ajax({
-      url: serverURL + 'php/list_churches.php',
-      success: function(list) {/*
-        var myList = {};
-        myList = list.split('\t');
-        console.log(myList);*/
-        $('#churchName').autocomplete({source: list.split('\t')});
-      }
-    }); 
-    $('#churchName').on('click change keyup mouseover', allowChurchSelection);
-    $('ul').on('click keyup keypress', allowChurchSelection);
-  } else {
-    personalize();
-  }
-  
+  // Load church settings from local storage
+  personalize();  
   backToWelcomeSlide();
   if (localStorage.getItem('slideCount') > 0) {
     populateLists(JSON.parse(localStorage.getItem("slides")));
@@ -131,6 +112,7 @@ $(window).bind('unload', function() {closeSlides(true);});
 
 $(document).keyup(handleKeypress);
 
+/*
 function allowChurchSelection(event) {
   setTimeout(function() {$.ajax({
     url: serverURL + 'php/get_ccli.php',
@@ -165,10 +147,9 @@ $.ajax({
     personalize();
     removeCoverFrame();
   }});
-}
+}*/
 
 function personalize() {
-  document.title = 'Worship Slide Control | ' + local.name;
   if (local.background) $('.slidecontent').css({'background-image': 'url(' + local.background + ')',
     'background-size': '100% 100%'});
 }
@@ -550,7 +531,6 @@ function handleKeypress(e) {
         previousSlide();
         break;
     } 
-    console.log(e.keyCode);
   }
 }
 
@@ -1229,7 +1209,6 @@ var formattingCommands =
 /* Here is a centralized TODO list
  
 * Deleting a slide is a little clumsy
-* The background doesn't update from the server
 * In parser, spaces disappear before speech marks
 
  */

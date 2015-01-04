@@ -137,7 +137,7 @@ function Slide (title, author, copyright, text, size) {
   this.size = size;
 }
 
-function renderChords (line) {
+function renderChords(line) {
   return line.replace(/\t/g, "      ").replace(/ /g, "&nbsp;");//.replace(/([A-G])b/g, "$1&#x266D");
 }
 
@@ -145,8 +145,11 @@ function unrenderChords(line) {
   return line.replace(/&nbsp;/g, " ").replace(/&#x266D/g, "b").replace(/&#x266F;/g, "#");
 }
 
-function array2slide (title, arr) {
-  return new Slide (title, arr["author"], arr["copyright"], arr["text"], arr["size"], arr["key"], arr["capo"]);
+function array2slide(title, arr) {
+  if (arr === null) {
+    return new Slide (title, "UNKNOWN", "UNKNOWN", "This slide has NULL contents on the server", "", "", "");
+  }
+  return new Slide(title, arr["author"], arr["copyright"], arr["text"], arr["size"], arr["key"], arr["capo"]);
 }
 
 function sortArray(arr) {

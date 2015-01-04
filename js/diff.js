@@ -20,6 +20,7 @@ $(document).ready(function() {
   $.ajax({
     url: serverURL + 'php/get_data.php',
     data: 'ccli=' + local.ccli,
+    traditional: true,
     success: function(json) {
       server = JSON.parse(json);
       var tempLists = server.setLists;
@@ -217,7 +218,6 @@ function commitChanges() {
             addedSlides += oSlide + "; ";
           }
           toCommit[oSlide] = (locallyStored[oSlide] || null);
-          console.log(toCommit[oSlide]);
         } else {
           deletedSlides += oSlide + "; ";
           delete toCommit[oSlide];
@@ -238,13 +238,18 @@ function commitChanges() {
   setStoredSlides(forLocal);
   // Add svn_log_message last; this will both provide a log message for the svn commit,
   // and act as a "end of file" marker to confirm that the connection has not been interrupted.
-  toCommit['ccli'] = local.ccli;
+  var postData = [local.ccli, JSON.stringify(toCommit)];
+  console.log(postData);
   if (serverModified) {
     $('#ajaxResult').html("Communicating with server; please don't close the window...");
     $('#commitButton').attr("disabled", "true");
     $.ajax({
       "url": serverURL + "php/put_songs.php",
-      "data": toCommit,
+      "data": {
+        ccli: local.ccli,
+        json: JSON.stringify(toCommit)
+      },
+      "traditional": true,
       "type": "POST",
       "success": function (data) {
         $('#ajaxResult').html(data);
@@ -340,6 +345,7 @@ function commitServerLists(callback) {
   $.ajax({
     url: serverURL + "php/upload_setlists.php",
     type: 'POST',
+    traditional: true,
     data: {
       ccli: local.ccli,
       setLists: server.setLists
