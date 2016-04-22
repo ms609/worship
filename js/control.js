@@ -1013,24 +1013,6 @@ function editSong(container) {
   '); 
 }
 
-function editSettings() {
-  addCoverFrame('Church settings: CCLI # ' + local.ccli,
-      '<div>\
-         <p><form><label for=name>Church name:</label><input name="name" id="newName" value="'
-    + local.name + '" /><input type=button value="Update" onclick="updateName();">\
-    <span id="nameStatus"></span></form></p>\
-         <iframe class="upload" src="' + serverURL + 'php/upload_background.php?ccli='
-          + local.ccli + '" />\
-          <input type="button" value="Update" onclick="updateBackground();" />\
-      <p><form enctype="multipart/form-data"><label for=welcome>Welcome slide:</label><input name="welcome"\
-          id="welcomeImage" type="file"\
-          alt="Upload an image to use as a \'Welcome slide\'" />\
-          <input type=button value="Update"></p>\
-    <span id="welcomeStatus"></span></form></p>\
-        </div>\
-  ');
-}
-
 function updateName() {
   var myData = {
     'ccli' : local.ccli,

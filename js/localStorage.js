@@ -22,15 +22,19 @@ window.applicationCache.addEventListener('updateready',
     updateSite, false);
 
 function setStoredSlides(slides) {
-  localStorage.setItem('slides', JSON.stringify(slides));
-  var g = 0;
-  for (var slide in slides) {
-    ++g;
+  if (Object.keys(slides).length > 0) {
+    localStorage.setItem('slides', JSON.stringify(slides));
+    var g = 0;
+    for (var slide in slides) {
+      ++g;
+    }
+    console.log("Setting # of song slides to " + g);
+    // we don't include the welcome slide (#0) or final slide in this count.
+    // g = the total number of songs.
+    localStorage.setItem('slideCount', g);
+  } else {
+    localStorage.setItem('slideCount', 0);
   }
-  console.log("Setting # of song slides to " + g);
-  // we don't include the welcome slide (#0) or final slide in this count.
-  // g = the total number of songs.
-  localStorage.setItem('slideCount', g);
 }
 
 // pass canUpdate = true if there's a chance of updating the slde content from the edit fields on the page
