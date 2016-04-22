@@ -5,7 +5,7 @@
  * Song content only available under terms of the CCLI.
  */
 
-var serverURL = 'http://www.rachelhelensmith.com/nlife/';
+var serverURL = 'http://songs.openworship.net/';
 
 var local = {};
 /* 
