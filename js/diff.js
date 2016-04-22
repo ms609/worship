@@ -66,13 +66,13 @@ $(document).ready(function() {
 
         // Setlists done; now do slides.  Last svn downloaded are saved as "local.songs"
         var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
-        var locallyEmpty = (locallyStored.length === 0 || local.songs === '{}');
+        var locallyEmpty = (locallyStored == null || local.songs === '{}');
         serverDatabase = server.songs ? JSON.parse(server.songs) : {};
         var forImmediateUpdate = locallyStored;
 
         var i = 0;
         for (var oSlide in serverDatabase) {
-          if (locallyStored[oSlide]) {} else {
+          if (locallyStored == null || locallyStored[oSlide]) {} else {
             var newSlide = array2slide(oSlide, serverDatabase[oSlide]);
             list.append(choice(++i, oSlide, 'Extra slide on server', locallyEmpty));
             addChange(i, "Slide", "(nothing)", slidePreview(newSlide), locallyEmpty);
