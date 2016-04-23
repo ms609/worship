@@ -66,7 +66,7 @@ $(document).ready(function() {
 
         // Setlists done; now do slides.
         var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : null;
-        var locallyEmpty = (locallyStored == null);
+        var locallyEmpty = (locallyStored == null || locallyStored == {});
         serverDatabase = server.songs ? JSON.parse(server.songs) : {};
         var forImmediateUpdate = locallyStored;
 
