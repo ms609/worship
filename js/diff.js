@@ -66,7 +66,7 @@ $(document).ready(function() {
 
         // Setlists done; now do slides.
         var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : null;
-        var locallyEmpty = (locallyStored == null || locallyStored == {});
+        var locallyEmpty = $.isEmptyObject(locallyStored);
         serverDatabase = server.songs ? JSON.parse(server.songs) : {};
         var forImmediateUpdate = locallyStored;
 
@@ -138,7 +138,6 @@ $(document).ready(function() {
       }
     },
     error: function () {
-      // TODO automatic retry
       list.append("<h2>Error</h2><p>Could not connect to central server.  Check your connection to the internet</p>");
     }
   });

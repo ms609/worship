@@ -45,11 +45,13 @@ function getStoredSlides(updateFromEditFields) {
     console.log("Updating stored slides first");
     updateStoredSlides(true);
   }
-  if (localStorage) {
+  if (localStorage && localStorage.getItem('slideCount')) {
    /* console.log("Getting slides from local storage.");
     console.log($.parseJSON(localStorage.getItem("slides")));*/
     return $.parseJSON(localStorage.getItem("slides"));
-  } else return false;
+  } else {
+    return false;
+  }
 }
 
 // Update from fields in edit.html
