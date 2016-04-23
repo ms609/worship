@@ -113,7 +113,7 @@ $(document).ready(function() {
               } else {
                 // Text modified
                 list.append(choice(++i, oSlide, "Content modified in local storage")); // Header row
-                addChange (i, "Slides", slidePreview(mySlide, "_mine", serverSlide), slidePreview(serverSlide, "_serv", mySlide));
+                addChange(i, "Slides", slidePreview(mySlide, "_mine", serverSlide), slidePreview(serverSlide, "_serv", mySlide));
               }
             } else {
               // Update from server without prompting
@@ -134,7 +134,11 @@ $(document).ready(function() {
              onclick="commitChanges();" />\
              <label for=commit id=ajaxResult>[Update server / computer]</label>'
         );
-        $('#bePatient').fadeOut();
+        if ($('#choice1').length) {
+          $('#bePatient').fadeOut();          
+        } else {
+          $('#bePatient').html('Connection with server established; server and computer are fully synchronized.');
+        }
       }
     },
     error: function () {
@@ -199,8 +203,8 @@ function choose (choice, i) {
 
 function commitChanges() {
   var toCommit = serverDatabase;
-  var locallyStored = localStorage.getItem("slideCount") > 0 ? getStoredSlides() : '{}';
-  var forLocal = (locallyStored === '{}' ? {} : locallyStored);
+  var locallyStored = localStorage.getItem("slideCount") > 0 ? getStoredSlides() : {};
+  var forLocal = (locallyStored === {} ? {} : locallyStored);
   var addedSlides = '';
   var deletedSlides = '';
   var modifiedSlides = '';
@@ -210,7 +214,7 @@ function commitChanges() {
     switch ($('#choice' + i).attr("choice")) {
       case "local":
         serverModified = true;
-        if (oSlide in locallyStored) {
+        if (!$.isEmptyObject(locallyStored) && oSlide in locallyStored) {
           if (typeof serverDatabase[oSlide] !== "undefined") {
             modifiedSlides += oSlide + "; ";
           } else {
