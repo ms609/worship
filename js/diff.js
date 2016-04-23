@@ -200,8 +200,8 @@ function choose (choice, i) {
 
 function commitChanges() {
   var toCommit = serverDatabase;
-  var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
-  var forLocal = (locallyStored === '{}' ? Array() : locallyStored);
+  var locallyStored = localStorage.getItem("slideCount") > 0 ? getStoredSlides() : '{}';
+  var forLocal = (locallyStored === '{}' ? {} : locallyStored);
   var addedSlides = '';
   var deletedSlides = '';
   var modifiedSlides = '';
@@ -211,7 +211,7 @@ function commitChanges() {
     switch ($('#choice' + i).attr("choice")) {
       case "local":
         serverModified = true;
-        if (locallyStored[oSlide]) {
+        if (oSlide in locallyStored) {
           if (typeof serverDatabase[oSlide] !== "undefined") {
             modifiedSlides += oSlide + "; ";
           } else {
@@ -224,7 +224,7 @@ function commitChanges() {
         }
         break;
       case "server":
-        if (serverDatabase[oSlide]) {
+        if (oSlide in serverDatabase) {
           forLocal[oSlide] = (serverDatabase[oSlide] || null);
         } else {
           delete forLocal[oSlide];
@@ -239,7 +239,6 @@ function commitChanges() {
   // Add svn_log_message last; this will both provide a log message for the svn commit,
   // and act as a "end of file" marker to confirm that the connection has not been interrupted.
   var postData = [local.ccli, JSON.stringify(toCommit)];
-  console.log(postData);
   if (serverModified) {
     $('#ajaxResult').html("Communicating with server; please don't close the window...");
     $('#commitButton').attr("disabled", "true");
@@ -284,15 +283,6 @@ function slidePreview(slide, id, cfSlide) {
     + ' </div>'
     + '</div>';
 }
-
-/* Generates slide content  and edit-boxes from json file / localStorage.
-
-  if (localStorage.getItem("slideCount")) {
-    parseDisplaySlides($('.presentation'), getStoredSlides());
-  } else {
-    parseDisplaySlides($('.presentation'), local.songs); (local.songs was previously slideDatabase.)
-  }
-});*/
 
 // This function taken from http://stackoverflow.com/questions/5224197
 function ifServerOnline(ifOnline, ifOffline) {
