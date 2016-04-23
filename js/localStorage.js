@@ -60,7 +60,7 @@ function updateStoredSlides(avoidLoop) {
     localJSON = getStoredSlides();
     count = localStorage.getItem('slideCount');
   } else {
-    localJSON = (typeof(lastJSON) == "undefined" ? local.songs : lastJSON);
+    localJSON = (typeof(lastJSON) == "undefined" ? null : lastJSON);
     for (var h in localJSON) {
       ++count;
     }

@@ -64,15 +64,15 @@ $(document).ready(function() {
           return setLists;
         });
 
-        // Setlists done; now do slides.  Last svn downloaded are saved as "local.songs"
-        var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : local.songs;
-        var locallyEmpty = (locallyStored == null || local.songs === '{}');
+        // Setlists done; now do slides.
+        var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : null;
+        var locallyEmpty = (locallyStored == null);
         serverDatabase = server.songs ? JSON.parse(server.songs) : {};
         var forImmediateUpdate = locallyStored;
 
         var i = 0;
         for (var oSlide in serverDatabase) {
-          if (locallyStored == null || locallyStored[oSlide]) {} else {
+          if (typeof(locallyStored) == 'undefined' || locallyStored == null || !(oSlide in locallyStored)) {
             var newSlide = array2slide(oSlide, serverDatabase[oSlide]);
             list.append(choice(++i, oSlide, 'Extra slide on server', locallyEmpty));
             addChange(i, "Slide", "(nothing)", slidePreview(newSlide), locallyEmpty);
@@ -129,10 +129,10 @@ $(document).ready(function() {
           }
         }
         setStoredSlides(forImmediateUpdate);
-        list.append('<h2 style="margin-top:3em;">Enact the above changes</h2>\
+        list.append('<h2 id="SyncSection" style="margin-top:3em;">Enact the above changes</h2>\
              <input type="button" class="bigButton" name="commit" value="Synchronize!"\
              onclick="commitChanges();" />\
-             <label for=commit id=ajaxResult>[Click to update the server]</label>'
+             <label for=commit id=ajaxResult>[Update server / computer]</label>'
         );
         $('#bePatient').fadeOut();
       }

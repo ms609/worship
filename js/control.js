@@ -1186,11 +1186,3 @@ var formattingCommands =
         <li>* echo *<br />\
             Asterisks surround echoes (e.g. where women sing a different lyric).</li>\
       </ul>';
-
-
-/* Here is a centralized TODO list
- 
-* Deleting a slide is a little clumsy
-* In parser, spaces disappear before speech marks
-
- */
