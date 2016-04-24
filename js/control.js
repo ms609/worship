@@ -1091,12 +1091,14 @@ function updateSlide() {
   });
 }
 
-function addSlide() {
+function titleAvailable(x) {
   var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : null;
+  return !(machineText(x) in locallyStored);
+}
+
+function addSlide() {
   var mySongTitle = $('#songTitle').val();
-  console.log(machineText(mySongTitle));
-  console.log(locallyStored);
-  if (mySongTitle !== "" && !(machineText(mySongTitle) in locallyStored)) {
+  if (mySongTitle !== "" && titleAvailable(mySongTitle)) {
     // Add to local slide database
     localStorage.setItem('slideCount', localStorage.getItem('slideCount') + 1);
     var storedSlides = getStoredSlides(true); // TODO check whether we can replace with JSON.parse(localStorage.getItem("slides")); to dispense with localStorage.js
@@ -1138,20 +1140,26 @@ function doEdit() {
   var original = new Slide (machineText($('#originalTitle').html()));
   original.position =  $('#originalTitle').attr('slidePos');
   var current = userSlide();
-  if (original.title !== current.title) {
-    localStorage.setItem('slide' + original.position, current.underscoreTitle);
-    $('#setListSong' + original.position + ' .setListTitle').html(current.title);
-    $('#setListSong' + original.position).val(current.underscoreTitle);
-    $('#originalTitle').html(current.title);
-    delete slideDatabase[original.underscoreTitle];
-    // rename song where it appears in saved setlists
-    var setLists = JSON.parse(localStorage.getItem('setLists'));
-    for (var list in setLists) {
-      for (var oSong in setLists[list]) {
-        if (setLists[list][oSong] === original.underscoreTitle) {
-          setLists[list][oSong] = current.underscoreTitle;
+  if (original.underscoreTitle !== current.underscoreTitle)) {
+    if (titleAvailable(current.title)) {
+      localStorage.setItem('slide' + original.position, current.underscoreTitle);
+      $('#setListSong' + original.position + ' .setListTitle').html(current.title);
+      $('#setListSong' + original.position).val(current.underscoreTitle);
+      $('#originalTitle').html(current.title);
+      delete slideDatabase[original.underscoreTitle];
+      // rename song where it appears in saved setlists
+      var setLists = JSON.parse(localStorage.getItem('setLists'));
+      for (var list in setLists) {
+        for (var oSong in setLists[list]) {
+          if (setLists[list][oSong] === original.underscoreTitle) {
+            setLists[list][oSong] = current.underscoreTitle;
+          }
         }
       }
+    } else {
+      $('#updateMsg').html("<p><b>Slide not modified</b> - specify a unique title</p>");
+      $('#titleLabel').css('background-color', 'yellow');
+      return false;      
     }
     localStorage.setItem('setLists', JSON.stringify(setLists));
   }

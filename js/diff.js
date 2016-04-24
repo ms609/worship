@@ -69,13 +69,19 @@ $(document).ready(function() {
         var locallyEmpty = $.isEmptyObject(locallyStored);
         serverDatabase = server.songs ? JSON.parse(server.songs) : {};
         var forImmediateUpdate = locallyStored;
+        var uniqueTitles = {};
 
         var i = 0;
         for (var oSlide in serverDatabase) {
           if (typeof(locallyStored) == 'undefined' || locallyStored == null || !(oSlide in locallyStored)) {
-            var newSlide = array2slide(oSlide, serverDatabase[oSlide]);
-            list.append(choice(++i, oSlide, 'Extra slide on server', locallyEmpty));
-            addChange(i, "Slide", "(nothing)", slidePreview(newSlide), locallyEmpty);
+            if (machineText(oSlide) in uniqueTitles) {
+              console.log('Duplicate slide, ' + oSlide);
+            } else {              
+              uniqueTitles[machineText(oSlide)] = true;
+              var newSlide = array2slide(oSlide, serverDatabase[oSlide]);
+              list.append(choice(++i, oSlide, 'Extra slide on server', locallyEmpty));
+              addChange(i, "Slide", "(nothing)", slidePreview(newSlide), locallyEmpty);
+            }
           }
         }
 
