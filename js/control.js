@@ -536,7 +536,7 @@ function handleKeypress(e) {
 
 function startSlideshow(callback) {
   slideshow = window.open(getUrl(onScreenNow || 'welcome'), "SlideShowWindow", "resizable=1,width=400,height=300,location=0");
-  slideshow.moveTo(1138,0);
+  if (slideshow) slideshow.moveTo(1138,0);
   if (callback) {
     setTimeout(callback, 250);
   }
@@ -603,6 +603,10 @@ function advanceAnnouncements() {
 }
 
 function reverseAnnouncements() {
+  if (!slideshow) {
+    console.log ("Slideshow window not found.  Are popups blocked?")
+    return;
+  }
   if (!slideshow.incrementals[slideshow.snum] || slideshow.incpos <= 0) {
     slideshow.go(-1);
   } else {
@@ -650,6 +654,7 @@ function showSlideCalled(title) {
       if (onScreenNow !== 'songs') {
         setScreen('songs');
       }
+      if (!slideshow) return console.log("Slideshow not open!");
       if (slideshow.document.getElementById('slide')) {
         var screen = $(slideshow.document.getElementById('slide'));
         $(slideshow.document.body).css({'background-image':'url(' + local.background + ')'});
@@ -953,7 +958,7 @@ function addSong() {
           </div>\
         </div>\
       <div style="float:left; width: 380px;">\
-        <label for="title">Title: </label>\
+        <label for="title" id="titleLabel">Title: </label>\
         <input type="text" required="required" class="title" name="title" id="songTitle" tabindex="1"\
           placeholder="Add new slide" onKeyUp="updateSlide();" />\
       <textarea name="text" id="editText" rows="17" tabindex="2"\
@@ -1087,11 +1092,15 @@ function updateSlide() {
 }
 
 function addSlide() {
-  if ($('#songTitle').val() !== "") {
+  var locallyStored = localStorage.getItem("slideCount") ? getStoredSlides() : null;
+  var mySongTitle = $('#songTitle').val();
+  console.log(machineText(mySongTitle));
+  console.log(locallyStored);
+  if (mySongTitle !== "" && !(machineText(mySongTitle) in locallyStored)) {
     // Add to local slide database
     localStorage.setItem('slideCount', localStorage.getItem('slideCount') + 1);
     var storedSlides = getStoredSlides(true); // TODO check whether we can replace with JSON.parse(localStorage.getItem("slides")); to dispense with localStorage.js
-    storedSlides[machineText($('#songTitle').val())] = {
+    storedSlides[machineText(mySongTitle)] = {
       "size": $('#fontSize').val(),
       "author":  $('#authorName').val(),
       "copyright": $('#copy').val(),
@@ -1120,7 +1129,8 @@ function addSlide() {
     <a href='javascript:removeCoverFrame()'>Close this window</a>\n\
 </span>");
   } else {
-    $('#updateMsg').html("<p>Slide not added - specify a title</p>");
+    $('#updateMsg').html("<p><b>Slide not added</b> - specify a unique title</p>");
+    $('#titleLabel').css('background-color', 'yellow');
   }
 }
 
