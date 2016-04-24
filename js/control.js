@@ -28,7 +28,7 @@ $(document).ready(function() {
   if (localStorage.getItem('slideCount') > 0) {
     populateLists(JSON.parse(localStorage.getItem("slides")));
   } else {
-    populateLists(slideDatabase);
+    getDataFromCCLI();
   }
   var currentSetList = localStorage.getItem('currentSetList') || "New";
   $('#selectSetList option[innerHTML="' + titleSetList(currentSetList) + '"]').attr('selected', 'selected');
@@ -127,12 +127,12 @@ function allowChurchSelection(event) {
     }
   });}, 100);
 }
-
-function confirmCCLI() {
+*/
+function getDataFromCCLI() {
 $('#confirmButton').val('Confirming...');
 $.ajax({
   url: serverURL + 'php/get_data.php',
-  data: {ccli: $('#CCLI').html()},
+  data: {ccli: local.ccli},
   success: function (data) {
     local = JSON.parse(data);
     localStorage.setItem('ccli', local.ccli);
@@ -145,9 +145,8 @@ $.ajax({
     populateLists(slideDatabase);
 
     personalize();
-    removeCoverFrame();
   }});
-}*/
+}
 
 function personalize() {
   if (local.background) $('.slidecontent').css({'background-image': 'url(' + local.background + ')',
@@ -1140,7 +1139,8 @@ function doEdit() {
   var original = new Slide (machineText($('#originalTitle').html()));
   original.position =  $('#originalTitle').attr('slidePos');
   var current = userSlide();
-  if (original.underscoreTitle !== current.underscoreTitle)) {
+  var slideDatabase = JSON.parse(localStorage.getItem('slides'));
+  if (original.underscoreTitle !== current.underscoreTitle) {
     if (titleAvailable(current.title)) {
       localStorage.setItem('slide' + original.position, current.underscoreTitle);
       $('#setListSong' + original.position + ' .setListTitle').html(current.title);
