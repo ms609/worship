@@ -8,9 +8,9 @@ function Slide (title, author, copyright, text, size) {
     text = allSlides[title]['text'];
     size = allSlides[title]['size'];
   }
-  
+
   this.title = title.replace(/^\s+|\s+$/g, "");
-  
+
   this.plainTitle = humanText(this.title);
 
   this.underscoreTitle = machineText(this.title);
@@ -88,7 +88,9 @@ function Slide (title, author, copyright, text, size) {
     if (openP) {
       parsed += "</p>";
     }
-    var replaceThis = new Array (/bolded/g, /italics/g, /indented/g, /tab(bed)?/g,
+    var replaceThis = new Array (/bolded/g, /italics/g, /indented/g,
+        // /tab(bed)?/g, // seems to replacing word that contain tab in them e.g. tabernacle
+          // and doesn't seem to really be used in the current slides
          /chorus ?1/g,  /chorus ?2/g, /bridge:?/g,
          /chorus ?3/g, /middle ?8/g, /outro/g,
          // This line must appear last to avoid replacing to, e.g., "yellow 3".
@@ -120,7 +122,7 @@ function Slide (title, author, copyright, text, size) {
   this.parsedTextSingleColumn = parseSlide(text).join("");
   this.parsedSlide = '<h1>' + this.parsedTitle + '</h1><div class=words>'
     + parseDivs(parseSlide(text, size, false)) + '</div>';
-  this.slideContent = 
+  this.slideContent =
       ' <h1> ' + this.parsedTitle + '</h1>'
       + '<div class="slidecontent">'
       + '  <div class="words">'
@@ -130,7 +132,7 @@ function Slide (title, author, copyright, text, size) {
       + this.credit
       + '</h2></div>' // /credit
       + '</div>';  // /slidecontent
- 
+
 
   this.preview = parseDivs(this.parsedText, size, this.credit);
 
@@ -234,15 +236,15 @@ function parseSlide(text) {
        /chorus/g,
        // Characters:
        /  +/g,  /\[/g, /\]/g, / class=\"\"/g, / "/g); // I replaced "" with //g, I hope that's the right thing to do!
-  var replaceWith = new Array ("bold", "italic",    "indent",   "indent", 
+  var replaceWith = new Array ("bold", "italic",    "indent",   "indent",
       "blue", "yellow", "yellow",
       "green", "green", "green",
       "blue",
       " ", "<", ">", "", '"');
-      
+
   for (i = 0; i < replaceThis.length; ++i) {
     parsed = parsed.replace(replaceThis[i], replaceWith[i]);
-  }  
+  }
   return parsed.split("---COLUMN BREAK---");
 }
 
