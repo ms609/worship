@@ -89,8 +89,6 @@ function Slide (title, author, copyright, text, size) {
       parsed += "</p>";
     }
     var replaceThis = new Array (/bolded/g, /italics/g, /indented/g,
-        // /tab(bed)?/g, // seems to replacing word that contain tab in them e.g. tabernacle
-          // and doesn't seem to really be used in the current slides
          /chorus ?1/g,  /chorus ?2/g, /bridge:?/g,
          /chorus ?3/g, /middle ?8/g, /outro/g,
          // This line must appear last to avoid replacing to, e.g., "yellow 3".
