@@ -88,6 +88,7 @@ function Slide (title, author, copyright, text, size) {
     if (openP) {
       parsed += "</p>";
     }
+
     var replaceThis = new Array (
         /bolded/g,
         /italics/g,
@@ -253,6 +254,7 @@ function parseSlide(text) {
   if (openP) {
     parsed += "</p>";
   }
+
   var replaceThis = new Array (
       /bolded/g,
       /italics/g,
