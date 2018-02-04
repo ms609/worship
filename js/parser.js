@@ -102,7 +102,13 @@ function Slide (title, author, copyright, text, size) {
          // This line must appear last to avoid replacing to, e.g., "yellow 3".
          /chorus:?/g,
          // Characters:
-         /  +/g, /\[/g, /\]/g, / class=\"\"/g, / "/g);
+         /  +/g,
+         /\[/g,
+         /\]/g,
+         / class=\"\"/g,
+         / "/g
+    );
+
     var replaceWith = new Array (
         "bold",
         "italic",
