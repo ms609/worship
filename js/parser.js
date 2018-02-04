@@ -88,18 +88,45 @@ function Slide (title, author, copyright, text, size) {
     if (openP) {
       parsed += "</p>";
     }
-    var replaceThis = new Array (/bolded/g, /italics/g, /indented/g,
-         /chorus ?1/g,  /chorus ?2/g, /bridge:?/g,
-         /chorus ?3/g, /middle ?8/g, /outro/g,
+
+    var replaceThis = new Array (
+        /bolded/g,
+        /italics/g,
+        /indented/g,
+        // /tab(bed)?/g,
+        /chorus ?1/g,
+        /chorus ?2/g,
+        /bridge:?/g,
+        /chorus ?3/g,
+        /middle ?8/g,
+        /outro/g,
          // This line must appear last to avoid replacing to, e.g., "yellow 3".
          /chorus:?/g,
          // Characters:
-         /  +/g, /\[/g, /\]/g, / class=\"\"/g, / "/g);
-    var replaceWith = new Array ("bold", "italic",    "indent",   "indent",
-        "blue", "yellow", "yellow",
-        "green", "green", "green",
+         /  +/g,
+         /\[/g,
+         /\]/g,
+         / class=\"\"/g,
+         / "/g
+    );
+
+    var replaceWith = new Array (
+        "bold",
+        "italic",
+        "indent",
+        // "indent",
         "blue",
-        " ", "<", ">", "", '"');
+        "yellow",
+        "yellow",
+        "green",
+        "green",
+        "green",
+        "blue",
+        " ",
+        "<",
+        ">",
+        "",
+        '"');
 
     for (i = 0; i < replaceThis.length; ++i) {
       parsed = parsed.replace(replaceThis[i], replaceWith[i]);
@@ -227,18 +254,43 @@ function parseSlide(text) {
   if (openP) {
     parsed += "</p>";
   }
-  var replaceThis = new Array (/bolded/g, /italics/g, /indented/g, /tab(bed)?/g,
-       /chorus ?1/g,  /chorus ?2/g, /bridge/g,
-       /chorus ?3/g, /middle ?8/g, /outro/g,
-       // This line must appear last to avoid replacing to, e.g., "yellow 3".
-       /chorus/g,
-       // Characters:
-       /  +/g,  /\[/g, /\]/g, / class=\"\"/g, / "/g); // I replaced "" with //g, I hope that's the right thing to do!
-  var replaceWith = new Array ("bold", "italic",    "indent",   "indent",
-      "blue", "yellow", "yellow",
-      "green", "green", "green",
+
+  var replaceThis = new Array (
+      /bolded/g,
+      /italics/g,
+      /indented/g,
+      // /tab(bed)?/g,
+      /chorus ?1/g,
+      /chorus ?2/g,
+      /bridge/g,
+      /chorus ?3/g,
+      /middle ?8/g,
+      /outro/g,
+      // This line must appear last to avoid replacing to, e.g., "yellow 3".
+      /chorus/g,
+      // Characters:
+      /  +/g,
+      /\[/g,
+      /\]/g,
+      / class=\"\"/g,
+      / "/g); // I replaced "" with //g, I hope that's the right thing to do!
+  var replaceWith = new Array (
+      "bold",
+      "italic",
+      "indent",
+      // "indent",
       "blue",
-      " ", "<", ">", "", '"');
+      "yellow",
+      "yellow",
+      "green",
+      "green",
+      "green",
+      "blue",
+      " ",
+      "<",
+      ">",
+      "",
+      '"');
 
   for (i = 0; i < replaceThis.length; ++i) {
     parsed = parsed.replace(replaceThis[i], replaceWith[i]);
